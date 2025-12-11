@@ -10,9 +10,12 @@ def get_connection():
         raise Exception("No hay credenciales activas. Debes iniciar sesión.")
 
     return psycopg2.connect(
-        host=POSTGRES_CONFIG["host"],
-        dbname=POSTGRES_CONFIG["dbname"],
-        port=POSTGRES_CONFIG["port"],
+        host=POSTGRES_CONFIG['host'],
+        dbname=POSTGRES_CONFIG['dbname'],
+        port=POSTGRES_CONFIG['port'],
         user=user,
         password=password
     )
+
+
+    

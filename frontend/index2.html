@@ -1,0 +1,3135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #0ea5a5;
+            --secondary-color: #06b6d4;
+            --background-color: #f8fafc;
+            --card-background: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --light-gray: #f0f4f8; /* Added for secretary view */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--background-color);
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--card-background);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        nav a:hover {
+            color: var(--primary-color);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0d9999;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        /* Hidden by default */
+        .auth-buttons.hide {
+            display: none;
+        }
+
+        .user-info {
+            display: none;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-info.show {
+            display: flex;
+        }
+
+        .user-welcome {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .user-role {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Home View */
+        .home-view {
+            display: block;
+        }
+
+        .home-view.hidden {
+            display: none;
+        }
+
+        /* Dashboard View */
+        .dashboard-view {
+            display: none;
+        }
+
+        .dashboard-view.show {
+            display: block;
+        }
+
+        /* Secretary View */
+        .secretary-view {
+            display: none;
+        }
+
+        .secretary-view.show {
+            display: block;
+        }
+
+        /* CHANGE> Added CSS for doctor, technician, and patient views */
+        .doctor-view {
+            display: none;
+        }
+
+        .doctor-view.show {
+            display: block;
+        }
+
+        .technician-view {
+            display: none;
+        }
+
+        .technician-view.show {
+            display: block;
+        }
+
+        .patient-view {
+            display: none;
+        }
+
+        .patient-view.show {
+            display: block;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 4rem 2rem;
+            border-radius: 12px;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Health Tips Section */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background-color: var(--card-background);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background-color: var(--card-background);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Dashboard Specific Styles */
+        .dashboard-header {
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-title {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .dashboard-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .analytics-section {
+            background-color: var(--card-background);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .analytics-section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .location-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .location-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--border-color);
+            background-color: transparent;
+            color: var(--text-primary);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .location-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .location-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .data-container {
+            background-color: var(--background-color);
+            border-radius: 8px;
+            padding: 2rem;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        .data-loading {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: var(--card-background);
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: var(--text-primary);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: color 0.3s;
+        }
+
+        .close-btn:hover {
+            color: var(--text-primary);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        label {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        input, select, textarea {
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(14, 165, 165, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .submit-btn {
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #0d9999;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 1rem;
+            }
+
+            nav {
+                gap: 1rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .location-buttons {
+                gap: 0.5rem;
+            }
+
+            .location-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .dashboard-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Locations Section */
+        .locations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .location-card {
+            background-color: var(--card-background);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-top: 4px solid var(--primary-color);
+        }
+
+        .location-card h3 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .location-info {
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Health Plans Section */
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .plan-card {
+            background-color: var(--card-background);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 2px solid var(--border-color);
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            border-color: var(--primary-color);
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .plan-price {
+            font-size: 2rem;
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .plan-features li {
+            padding: 0.5rem 0;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .plan-features li:last-child {
+            border-bottom: none;
+        }
+
+        /* Team Section */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .team-card {
+            background-color: var(--card-background);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .team-image {
+            width: 100%;
+            height: 200px;
+            background-color: var(--background-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .team-info {
+            padding: 1.5rem;
+        }
+
+        .team-info h3 {
+            color: var(--text-primary);
+            margin-bottom: 0.3rem;
+        }
+
+        .team-specialty {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .team-info p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--text-primary);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Added styles for dashboard data cards */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+        }
+
+        .data-card {
+            background-color: var(--card-background);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .data-card h4 {
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .data-card p {
+            color: var(--text-secondary);
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+        .data-card p strong {
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                🏥 HealthCare+
+            </div>
+            <nav>
+                <a href="#" onclick="switchToHome()" id="home-link" style="display: none;">Inicio</a>
+                <a href="#" onclick="switchToDashboard()" id="dashboard-link" style="display: none;">Dashboard</a>
+                <a href="#" onclick="switchToSecretaryView()" id="secretary-link" style="display: none;">Citas</a>
+                <!-- Add links for other roles if needed -->
+                <a href="#" onclick="switchToDoctorView()" id="doctor-link" style="display: none;">Mis Pacientes</a>
+                <a href="#" onclick="switchToTechnicianView()" id="technician-link" style="display: none;">Resultados</a>
+                <a href="#" onclick="switchToPatientView()" id="patient-link" style="display: none;">Mi Perfil</a>
+            </nav>
+            <div class="auth-buttons" id="auth-buttons">
+                <button class="btn btn-outline" onclick="openLoginModal()">Iniciar Sesión</button>
+                <button class="btn btn-primary" onclick="openRegisterModal()">Registrarse</button>
+            </div>
+            <div class="user-info" id="user-info">
+                <div class="user-welcome">Bienvenido, <span class="user-role" id="user-name">Usuario</span></div>
+                <button class="btn btn-secondary" onclick="handleLogout()">Cerrar Sesión</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Home View -->
+        <div class="home-view" id="home-view">
+            <!-- Hero Section -->
+            <section class="hero">
+                <h1>Tu Salud, Nuestra Prioridad</h1>
+                <p>Experimenta atención médica de clase mundial con nuestros servicios médicos integrales y profesionales expertos</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="openAppointmentModal()">Agendar Cita</button>
+                    <button class="btn btn-secondary">Saber Más</button>
+                </div>
+            </section>
+
+            <!-- Health Tips Section -->
+            <section class="section">
+                <h2 class="section-title">💡 Consejos de Salud</h2>
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-icon">🥗</div>
+                        <h3>Nutrición Balanceada</h3>
+                        <p>Mantén una dieta equilibrada rica en vegetales, frutas y granos enteros para apoyar la salud general.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🏃</div>
+                        <h3>Ejercicio Regular</h3>
+                        <p>Apunta a al menos 30 minutos de ejercicio moderado diario para mantener tu cuerpo en forma y activo.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">😴</div>
+                        <h3>Sueño de Calidad</h3>
+                        <p>Duerme de 7 a 9 horas de calidad cada noche para una recuperación adecuada y salud mental.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">💧</div>
+                        <h3>Mantente Hidratado</h3>
+                        <p>Bebe al menos 8 vasos de agua al día para mantener la hidratación adecuada y las funciones corporales.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🧘</div>
+                        <h3>Manejo del Estrés</h3>
+                        <p>Practica meditación y técnicas de relajación para reducir el estrés y mejorar el bienestar mental.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🏥</div>
+                        <h3>Chequeos Regulares</h3>
+                        <p>Programa chequeos médicos rutinarios para detectar cualquier problema de salud potencial temprano.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About Section -->
+            <section class="section">
+                <h2 class="section-title">Acerca de HealthCare+</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">Ubicaciones</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">500+</div>
+                        <div class="stat-label">Doctores</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">1M+</div>
+                        <div class="stat-label">Pacientes Felices</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">30+</div>
+                        <div class="stat-label">Especialidades</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Locations Section -->
+            <section class="section">
+                <h2 class="section-title">🏢 Nuestras Ubicaciones</h2>
+                <div class="locations-grid">
+                    <div class="location-card">
+                        <h3>Hospital Centro</h3>
+                        <div class="location-info">
+                            <span>📍</span>
+                            <div>
+                                <p>Av. Médica 123, Centro Ciudad</p>
+                                <p>Teléfono: (555) 123-4567</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="location-card">
+                        <h3>Clínica Oeste</h3>
+                        <div class="location-info">
+                            <span>📍</span>
+                            <div>
+                                <p>Calle Salud 456, Distrito Oeste</p>
+                                <p>Teléfono: (555) 234-5678</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="location-card">
+                        <h3>Centro Médico Este</h3>
+                        <div class="location-info">
+                            <span>📍</span>
+                            <div>
+                                <p>Blvd. Bienestar 789, Lado Este</p>
+                                <p>Teléfono: (555) 345-6789</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="location-card">
+                        <h3>Plaza Médica Norte</h3>
+                        <div class="location-info">
+                            <span>📍</span>
+                            <div>
+                                <p>Avenida Cuidado 321, Área Norte</p>
+                                <p>Teléfono: (555) 456-7890</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="location-card">
+                        <h3>Centro de Salud Sur</h3>
+                        <div class="location-info">
+                            <span>📍</span>
+                            <div>
+                                <p>Calle Recuperación 654, Zona Sur</p>
+                                <p>Teléfono: (555) 567-8901</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="location-card">
+                        <h3>Complejo de Atención Central</h3>
+                        <div class="location-info">
+                            <span>📍</span>
+                            <div>
+                                <p>Parque Salud 987, Centro Principal</p>
+                                <p>Teléfono: (555) 678-9012</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Health Plans Section -->
+            <section class="section">
+                <h2 class="section-title">💳 Planes de Salud</h2>
+                <div class="plans-grid">
+                    <div class="plan-card">
+                        <div class="plan-name">Plan Básico</div>
+                        <div class="plan-price">$49<span style="font-size: 1rem; color: var(--text-secondary);">/mes</span></div>
+                        <ul class="plan-features">
+                            <li>✓ Chequeos básicos</li>
+                            <li>✓ Atención de emergencia</li>
+                            <li>✓ Consultas en línea</li>
+                            <li>✗ Visitas a especialistas</li>
+                        </ul>
+                        <button class="btn btn-primary">Elegir Plan</button>
+                    </div>
+                    <div class="plan-card">
+                        <div class="plan-name">Plan Premium</div>
+                        <div class="plan-price">$99<span style="font-size: 1rem; color: var(--text-secondary);">/mes</span></div>
+                        <ul class="plan-features">
+                            <li>✓ Todos los beneficios básicos</li>
+                            <li>✓ Visitas a especialistas</li>
+                            <li>✓ Atención dental</li>
+                            <li>✓ Soporte 24/7</li>
+                        </ul>
+                        <button class="btn btn-primary">Elegir Plan</button>
+                    </div>
+                    <div class="plan-card">
+                        <div class="plan-name">Plan Familiar</div>
+                        <div class="plan-price">$199<span style="font-size: 1rem; color: var(--text-secondary);">/mes</span></div>
+                        <ul class="plan-features">
+                            <li>✓ Todos los beneficios premium</li>
+                            <li>✓ Cobertura familiar (5 personas)</li>
+                            <li>✓ Cuidado de la vista</li>
+                            <li>✓ Apoyo en salud mental</li>
+                        </ul>
+                        <button class="btn btn-primary">Elegir Plan</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Team Section -->
+            <section class="section">
+                <h2 class="section-title">👨‍⚕️ Our Medical Team</h2>
+                <div class="team-grid">
+                    <div class="team-card">
+                        <div class="team-image">👨‍⚕️</div>
+                        <div class="team-info">
+                            <h3>Dr. John Smith</h3>
+                            <div class="team-specialty">Cardiology</div>
+                            <p>Expert in heart and cardiovascular diseases with 15+ years experience</p>
+                        </div>
+                    </div>
+                    <div class="team-card">
+                        <div class="team-image">👩‍⚕️</div>
+                        <div class="team-info">
+                            <h3>Dr. Sarah Johnson</h3>
+                            <div class="team-specialty">Orthopedics</div>
+                            <p>Specialized in bone and joint treatments with advanced surgical skills</p>
+                        </div>
+                    </div>
+                    <div class="team-card">
+                        <div class="team-image">👨‍⚕️</div>
+                        <div class="team-info">
+                            <h3>Dr. Michael Brown</h3>
+                            <div class="team-specialty">Neurology</div>
+                            <p>Expert in nervous system disorders and neurological conditions</p>
+                        </div>
+                    </div>
+                    <div class="team-card">
+                        <div class="team-image">👩‍⚕️</div>
+                        <div class="team-info">
+                            <h3>Dr. Emily Davis</h3>
+                            <div class="team-specialty">Pediatrics</div>
+                            <p>Caring for children's health with compassion and expertise</p>
+                        </div>
+                    </div>
+                    <div class="team-card">
+                        <div class="team-image">👨‍⚕️</div>
+                        <div class="team-info">
+                            <h3>Dr. Robert Wilson</h3>
+                            <div class="team-specialty">Oncology</div>
+                            <p>Specializing in cancer treatment and patient care</p>
+                        </div>
+                    </div>
+                    <div class="team-card">
+                        <div class="team-image">👩‍⚕️</div>
+                        <div class="team-info">
+                            <h3>Dr. Lisa Anderson</h3>
+                            <div class="team-specialty">Dermatology</div>
+                            <p>Expert in skin health and cosmetic procedures</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Admin Dashboard View -->
+        <div class="dashboard-view" id="dashboard-view">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Dashboard de Análisis</h1>
+                <p class="dashboard-subtitle">Monitorea métricas clave de salud e indicadores de rendimiento</p>
+            </div>
+
+            <!-- Most Prescribed Medications Section -->
+            <div class="analytics-section">
+                <h2 class="analytics-section-title">💊 Medicamentos más recetados (último mes)</h2>
+                <div class="location-buttons">
+                    <button class="location-btn active" onclick="fetchMedications(event, 'global')">Global</button>
+                    <button class="location-btn" onclick="fetchMedications(event, 'downtown')">Hospital Central</button>
+                    <button class="location-btn" onclick="fetchMedications(event, 'westside')">Clínica Oeste</button>
+                    <button class="location-btn" onclick="fetchMedications(event, 'eastside')">Centro Médico Este</button>
+                </div>
+                <div class="data-container" id="medications-container">
+                    <div class="data-loading">Cargando datos de medicamentos...</div>
+                </div>
+            </div>
+
+            <!-- Doctors with Highest Consultations Section -->
+            <div class="analytics-section">
+                <h2 class="analytics-section-title">👨‍⚕️ Doctores con más consultas (por semana)</h2>
+                <div class="location-buttons">
+                    <button class="location-btn active" onclick="fetchConsultations(event, 'global')">Global</button>
+                    <button class="location-btn" onclick="fetchConsultations(event, 'downtown')">Hospital Central</button>
+                    <button class="location-btn" onclick="fetchConsultations(event, 'westside')">Clínica Oeste</button>
+                    <button class="location-btn" onclick="fetchConsultations(event, 'eastside')">Centro Médico Este</button>
+                </div>
+                <div class="data-container" id="consultations-container">
+                    <div class="data-loading">Cargando datos de consultas...</div>
+                </div>
+            </div>
+
+            <!-- Average Time Between Appointment and Diagnosis Section -->
+            <div class="analytics-section">
+                <h2 class="analytics-section-title">⏱️ Tiempo promedio: cita a diagnóstico</h2>
+                <div class="location-buttons">
+                    <button class="location-btn active" onclick="fetchAppointmentTime(event, 'global')">Global</button>
+                    <button class="location-btn" onclick="fetchAppointmentTime(event, 'downtown')">Hospital Central</button>
+                    <button class="location-btn" onclick="fetchAppointmentTime(event, 'westside')">Clínica Oeste</button>
+                    <button class="location-btn" onclick="fetchAppointmentTime(event, 'eastside')">Centro Médico Este</button>
+                </div>
+                <div class="data-container" id="appointment-time-container">
+                    <div class="data-loading">Cargando datos de tiempo de cita...</div>
+                </div>
+            </div>
+
+            <!-- Patients Treated Per Illness Section -->
+            <div class="analytics-section">
+                <h2 class="analytics-section-title">🏥 Pacientes atendidos por enfermedad</h2>
+                <div class="location-buttons">
+                    <button class="location-btn active" onclick="fetchPatientsPerIllness(event, 'global')">Global</button>
+                    <button class="location-btn" onclick="fetchPatientsPerIllness(event, 'downtown')">Hospital Central</button>
+                    <button class="location-btn" onclick="fetchPatientsPerIllness(event, 'westside')">Clínica Oeste</button>
+                    <button class="location-btn" onclick="fetchPatientsPerIllness(event, 'eastside')">Centro Médico Este</button>
+                </div>
+                <div class="data-container" id="illness-patients-container">
+                    <div class="data-loading">Cargando datos de enfermedades...</div>
+                </div>
+            </div>
+
+            <!-- Added Equipment Sharing section with location buttons -->
+            <div class="analytics-section">
+                <h2 class="analytics-section-title">⚙️ Departamentos y equipamiento compartido por sede</h2>
+                <div class="location-buttons">
+                    <button class="location-btn active" onclick="fetchEquipment(event, 'global')">Global</button>
+                    <button class="location-btn" onclick="fetchEquipment(event, 'downtown')">Hospital Central</button>
+                    <button class="location-btn" onclick="fetchEquipment(event, 'westside')">Clínica Oeste</button>
+                    <button class="location-btn" onclick="fetchEquipment(event, 'eastside')">Centro Médico Este</button>
+                </div>
+                <div class="data-container" id="equipment-container">
+                    <div class="data-loading">Cargando datos de equipamiento...</div>
+                </div>
+            </div>
+
+            <!-- Added Audit Report section -->
+            <div class="analytics-section">
+                <h2 class="analytics-section-title">📊 Informe Auditoría</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Consulta el informe de auditoría del sistema con registros de accesos y actividades.</p>
+                <button class="submit-btn" onclick="generateAuditReport(event)" style="padding: 0.75rem 2rem; font-size: 1rem;">
+                    📥 Ver / Generar informe
+                </button>
+                <div class="data-container" id="audit-container" style="margin-top: 2rem;">
+                    <div class="data-loading" id="audit-loading" style="display: none;">Cargando informe de auditoría...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Secretary Appointment System View -->
+        <div class="secretary-view" id="secretary-view">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Sistema de Agendamiento de Citas</h1>
+                <p class="dashboard-subtitle">Agenda y administra citas médicas de pacientes</p>
+            </div>
+
+            <div class="analytics-section" style="max-width: 800px;">
+                <h2 class="analytics-section-title">📅 Agendar Nueva Cita</h2>
+
+                <form id="appointment-form" onsubmit="handleSecretaryAppointment(event)">
+                    <!-- Step 1: Location Selection -->
+                    <div class="form-group">
+                        <label for="appointment-location">Seleccionar Ubicación *</label>
+                        <select id="appointment-location" required onchange="onLocationChange()">
+                            <option value="">-- Elige una ubicación --</option>
+                            <option value="downtown">Hospital Centro</option>
+                            <option value="westside">Clínica Oeste</option>
+                            <option value="eastside">Centro Médico Este</option>
+                        </select>
+                    </div>
+
+                    <!-- Step 2: Department Selection (populated via API) -->
+                    <div class="form-group">
+                        <label for="appointment-department">Seleccionar Departamento *</label>
+                        <select id="appointment-department" required onchange="onDepartmentChange()">
+                            <option value="">-- Elige un departamento --</option>
+                        </select>
+                        <div id="department-loading" style="display: none; color: var(--secondary-color); font-size: 0.9rem; margin-top: 0.5rem;">Cargando departamentos...</div>
+                    </div>
+
+                    <!-- Step 3: Doctor Selection (populated via API) -->
+                    <div class="form-group">
+                        <label for="appointment-doctor">Seleccionar Doctor *</label>
+                        <select id="appointment-doctor" required onchange="onDoctorChange()">
+                            <option value="">-- Elige un doctor --</option>
+                        </select>
+                        <div id="doctor-loading" style="display: none; color: var(--secondary-color); font-size: 0.9rem; margin-top: 0.5rem;">Cargando doctores...</div>
+                    </div>
+
+                    <!-- Step 4: Date and Time Selection (populated via API) -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label for="appointment-date">Seleccionar Fecha *</label>
+                            <input type="date" id="appointment-date" required onchange="onDateChange()">
+                            <div id="date-loading" style="display: none; color: var(--secondary-color); font-size: 0.9rem; margin-top: 0.5rem;">Cargando fechas disponibles...</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="appointment-time">Seleccionar Hora *</label>
+                            <select id="appointment-time" required>
+                                <option value="">-- Elige una hora --</option>
+                            </select>
+                            <div id="time-loading" style="display: none; color: var(--secondary-color); font-size: 0.9rem; margin-top: 0.5rem;">Cargando horarios disponibles...</div>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Service Type Selection -->
+                    <div class="form-group">
+                        <label for="appointment-service">Tipo de Servicio *</label>
+                        <select id="appointment-service" required>
+                            <option value="">-- Elige un tipo de servicio --</option>
+                            <option value="general-consultation">Consulta General</option>
+                            <option value="check-up">Chequeo</option>
+                            <option value="follow-up">Seguimiento</option>
+                            <option value="urgent-care">Atención Urgente</option>
+                            <option value="preventive-care">Cuidado Preventivo</option>
+                            <option value="procedure">Procedimiento</option>
+                        </select>
+                    </div>
+
+                    <!-- Patient Information -->
+                    <div style="background-color: var(--light-gray); padding: 1.5rem; border-radius: 8px; margin: 1.5rem 0;">
+                        <h3 style="margin-bottom: 1rem; color: var(--primary-color);">Información del Paciente</h3>
+                        <div class="form-group">
+                            <label for="appointment-patient-id">ID de Paciente *</label>
+                            <input type="text" id="appointment-patient-id" required placeholder="Ingresa ID de paciente o busca por ID">
+                        </div>
+                        <div class="form-group">
+                            <label for="appointment-patient-name">Nombre del Paciente *</label>
+                            <input type="text" id="appointment-patient-name" required placeholder="Nombre completo del paciente" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="appointment-patient-email">Email del Paciente *</label>
+                            <input type="email" id="appointment-patient-email" required placeholder="paciente@email.com" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="form-group">
+                        <label for="appointment-notes">Notas Adicionales</label>
+                        <textarea id="appointment-notes" placeholder="Solicitudes especiales o notas médicas..." style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-family: inherit; font-size: 0.95rem; resize: vertical; min-height: 100px;"></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn" style="width: 100%; padding: 1rem; font-size: 1.05rem; margin-top: 1.5rem;">
+                        Agendar Cita
+                    </button>
+                </form>
+            </div>
+
+            <!-- Scheduled Appointments List -->
+            <div class="analytics-section">
+                <h2 class="analytics-section-title">📋 Citas Agendadas de Hoy</h2>
+                <div id="appointments-list-container" class="data-container">
+                    <button class="submit-btn" onclick="fetchTodaysAppointments()" style="padding: 0.75rem 1.5rem;">Cargar Citas de Hoy</button>
+                    <div id="appointments-list" style="margin-top: 1.5rem;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Doctor View -->
+        <div class="doctor-view" id="doctor-view">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Portal del Doctor</h1>
+                <p class="dashboard-subtitle">Administra tus citas, prescripciones y expedientes médicos</p>
+            </div>
+
+            <!-- Assigned Appointments Section -->
+            <div class="analytics-section">
+                <h2 class="analytics-section-title">📅 Mis Citas Asignadas</h2>
+                <div id="doctor-appointments-container" class="data-container">
+                    <button class="submit-btn" onclick="fetchDoctorAppointments()" style="padding: 0.75rem 1.5rem;">Cargar Mis Citas</button>
+                    <div id="doctor-appointments-list" style="margin-top: 1.5rem;"></div>
+                </div>
+            </div>
+
+            <!-- Prescriptions Section -->
+            <div class="analytics-section">
+                <h2 class="analytics-section-title">💊 Prescripciones</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                    <!-- Write New Prescription -->
+                    <div style="background-color: var(--light-gray); padding: 1.5rem; border-radius: 8px;">
+                        <h3 style="margin-bottom: 1rem; color: var(--primary-color);">✏️ Crear Nueva Prescripción</h3>
+                        <form id="prescription-form" onsubmit="handleWritePrescription(event)">
+                            <div class="form-group">
+                                <label for="prescription-patient-id">ID de Paciente *</label>
+                                <input type="text" id="prescription-patient-id" required placeholder="Ingresa ID de paciente">
+                            </div>
+                            <div class="form-group">
+                                <label for="prescription-medication">Medicamento *</label>
+                                <input type="text" id="prescription-medication" required placeholder="Nombre del medicamento">
+                            </div>
+                            <div class="form-group">
+                                <label for="prescription-dosage">Dosis *</label>
+                                <input type="text" id="prescription-dosage" required placeholder="ej. 500mg">
+                            </div>
+                            <div class="form-group">
+                                <label for="prescription-frequency">Frecuencia *</label>
+                                <select id="prescription-frequency" required>
+                                    <option value="">-- Selecciona frecuencia --</option>
+                                    <option value="once-daily">Una vez al día</option>
+                                    <option value="twice-daily">Dos veces al día</option>
+                                    <option value="three-times">Tres veces al día</option>
+                                    <option value="every-4-hours">Cada 4 horas</option>
+                                    <option value="every-6-hours">Cada 6 horas</option>
+                                    <option value="every-8-hours">Cada 8 horas</option>
+                                    <option value="as-needed">Según necesidad</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="prescription-duration">Duración (días) *</label>
+                                <input type="number" id="prescription-duration" required placeholder="30" min="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="prescription-notes">Instrucciones Especiales</label>
+                                <textarea id="prescription-notes" placeholder="Instrucciones especiales..." style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-family: inherit; font-size: 0.95rem; resize: vertical; min-height: 80px;"></textarea>
+                            </div>
+                            <button type="submit" class="submit-btn" style="width: 100%;">Crear Prescripción</button>
+                        </form>
+                    </div>
+
+                    <!-- View Patient Prescriptions -->
+                    <div style="background-color: var(--light-gray); padding: 1.5rem; border-radius: 8px;">
+                        <h3 style="margin-bottom: 1rem; color: var(--primary-color);">👁️ Ver Prescripciones</h3>
+                        <div class="form-group">
+                            <label for="view-prescription-patient-id">ID de Paciente *</label>
+                            <input type="text" id="view-prescription-patient-id" required placeholder="Ingresa ID de paciente para ver prescripciones">
+                        </div>
+                        <button class="submit-btn" onclick="fetchPatientPrescriptions()" style="width: 100%;">Buscar Prescripciones</button>
+                        <div id="patient-prescriptions-list" style="margin-top: 1.5rem;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Medical Records Section -->
+            <div class="analytics-section">
+                <h2 class="analytics-section-title">📄 Expedientes Médicos</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <!-- Write New Medical Record -->
+                    <div style="background-color: var(--light-gray); padding: 1.5rem; border-radius: 8px;">
+                        <h3 style="margin-bottom: 1rem; color: var(--primary-color);">✏️ Crear Expediente Médico</h3>
+                        <form id="medical-record-form" onsubmit="handleWriteMedicalRecord(event)">
+                            <div class="form-group">
+                                <label for="record-patient-id">ID de Paciente *</label>
+                                <input type="text" id="record-patient-id" required placeholder="Ingresa ID de paciente">
+                            </div>
+                            <div class="form-group">
+                                <label for="record-appointment-id">ID de Cita *</label>
+                                <input type="text" id="record-appointment-id" required placeholder="ID de cita relacionada">
+                            </div>
+                            <div class="form-group">
+                                <label for="record-diagnosis">Diagnóstico *</label>
+                                <input type="text" id="record-diagnosis" required placeholder="Diagnóstico principal">
+                            </div>
+                            <div class="form-group">
+                                <label for="record-vital-signs">Signos Vitales *</label>
+                                <textarea id="record-vital-signs" required placeholder="Presión arterial, Temperatura, Frecuencia cardíaca, etc..." style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-family: inherit; font-size: 0.95rem; resize: vertical; min-height: 60px;"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="record-notes">Notas Clínicas *</label>
+                                <textarea id="record-notes" required placeholder="Observaciones clínicas detalladas y hallazgos..." style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-family: inherit; font-size: 0.95rem; resize: vertical; min-height: 100px;"></textarea>
+                            </div>
+                            <button type="submit" class="submit-btn" style="width: 100%;">Guardar Expediente Médico</button>
+                        </form>
+                    </div>
+
+                    <!-- View Patient Medical Records -->
+                    <div style="background-color: var(--light-gray); padding: 1.5rem; border-radius: 8px;">
+                        <h3 style="margin-bottom: 1rem; color: var(--primary-color);">👁️ Ver Expedientes Médicos</h3>
+                        <div class="form-group">
+                            <label for="view-record-patient-id">ID de Paciente *</label>
+                            <input type="text" id="view-record-patient-id" required placeholder="Ingresa ID de paciente para ver expedientes">
+                        </div>
+                        <button class="submit-btn" onclick="fetchPatientMedicalRecords()" style="width: 100%;">Buscar Expedientes</button>
+                        <div id="patient-medical-records-list" style="margin-top: 1.5rem;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technician View -->
+        <div class="technician-view" id="technician-view">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Portal del Técnico</h1>
+                <p class="dashboard-subtitle">Administra equipos y registra actividades de mantenimiento</p>
+            </div>
+
+            <!-- Equipment List Section -->
+            <div class="analytics-section">
+                <h2 class="analytics-section-title">🔧 Inventario de Equipos</h2>
+                <div id="equipment-container" class="data-container">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                        <div>
+                            <label for="equipment-location-filter" style="font-weight: 600; color: var(--text-primary); display: block; margin-bottom: 0.5rem;">Filtrar por Ubicación:</label>
+                            <select id="equipment-location-filter" onchange="filterEquipmentByLocation()" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px;">
+                                <option value="global">Vista Global</option>
+                                <option value="downtown">Hospital Centro</option>
+                                <option value="westside">Clínica Oeste</option>
+                                <option value="eastside">Centro Médico Este</option>
+                            </select>
+                        </div>
+                        <button class="submit-btn" onclick="fetchEquipmentList()" style="padding: 0.75rem 1.5rem; align-self: flex-end;">Cargar Equipos</button>
+                    </div>
+                    <div id="equipment-list" style="margin-top: 1.5rem;"></div>
+                </div>
+            </div>
+
+            <!-- Maintenance Recording Section -->
+            <div class="analytics-section">
+                <h2 class="analytics-section-title">🛠️ Registrar Mantenimiento</h2>
+                <div style="background-color: var(--light-gray); padding: 1.5rem; border-radius: 8px; max-width: 600px;">
+                    <form id="maintenance-form" onsubmit="handleRecordMaintenance(event)">
+                        <div class="form-group">
+                            <label for="maintenance-equipment-id">ID de Equipo *</label>
+                            <input type="text" id="maintenance-equipment-id" required placeholder="Ingresa el ID del equipo">
+                        </div>
+                        <div class="form-group">
+                            <label for="maintenance-equipment-name">Nombre del Equipo *</label>
+                            <input type="text" id="maintenance-equipment-name" required placeholder="Nombre del equipo">
+                        </div>
+                        <div class="form-group">
+                            <label for="maintenance-location">Ubicación *</label>
+                            <select id="maintenance-location" required>
+                                <option value="">-- Selecciona ubicación --</option>
+                                <option value="downtown">Hospital Centro</option>
+                                <option value="westside">Clínica Oeste</option>
+                                <option value="eastside">Centro Médico Este</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="maintenance-type">Tipo de Mantenimiento *</label>
+                            <select id="maintenance-type" required>
+                                <option value="">-- Selecciona tipo --</option>
+                                <option value="preventive">Mantenimiento Preventivo</option>
+                                <option value="corrective">Mantenimiento Correctivo</option>
+                                <option value="calibration">Calibración</option>
+                                <option value="repair">Reparación</option>
+                                <option value="inspection">Inspección</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="maintenance-date">Fecha Realizada *</label>
+                            <input type="date" id="maintenance-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="maintenance-description">Descripción del Trabajo *</label>
+                            <textarea id="maintenance-description" required placeholder="Describe el mantenimiento realizado..." style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 6px; font-family: inherit; font-size: 0.95rem; resize: vertical; min-height: 100px;"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="maintenance-status">Estado *</label>
+                            <select id="maintenance-status" required>
+                                <option value="">-- Selecciona estado --</option>
+                                <option value="completed">Completado</option>
+                                <option value="in-progress">En Progreso</option>
+                                <option value="pending">Esperando Piezas</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="submit-btn" style="width: 100%;">Registrar Mantenimiento</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Maintenance History Section -->
+            <div class="analytics-section">
+                <h2 class="analytics-section-title">📋 Historial de Mantenimiento</h2>
+                <button class="submit-btn" onclick="fetchMaintenanceHistory()" style="padding: 0.75rem 1.5rem; margin-bottom: 1.5rem;">Cargar Historial de Mantenimiento</button>
+                <div id="maintenance-history-list" class="data-container"></div>
+            </div>
+        </div>
+
+        <!-- Patient View -->
+        <div class="patient-view" id="patient-view">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Portal del Paciente</h1>
+                <p class="dashboard-subtitle">Visualiza tus citas y prescripciones</p>
+            </div>
+
+            <!-- Patient Appointments Section -->
+            <div class="analytics-section">
+                <h2 class="analytics-section-title">📅 Mis Citas</h2>
+                <div id="patient-appointments-container" class="data-container">
+                    <button class="submit-btn" onclick="fetchPatientAppointmentsView()" style="padding: 0.75rem 1.5rem;">Cargar Mis Citas</button>
+                    <div id="patient-appointments-list" style="margin-top: 1.5rem;"></div>
+                </div>
+            </div>
+
+            <!-- Patient Prescriptions Section -->
+            <div class="analytics-section">
+                <h2 class="analytics-section-title">💊 Mis Prescripciones</h2>
+                <div id="patient-prescriptions-container" class="data-container">
+                    <button class="submit-btn" onclick="fetchPatientPrescriptionsView()" style="padding: 0.75rem 1.5rem;">Cargar Mis Prescripciones</button>
+                    <div id="patient-prescriptions-view-list" style="margin-top: 1.5rem;"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Iniciar Sesión en tu Cuenta</h2>
+                <button class="close-btn" onclick="closeLoginModal()">&times;</button>
+            </div>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="login-persona-id">ID de Persona</label>
+                    <input type="text" id="login-persona-id" required placeholder="Ingresa tu persona_id">
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Contraseña</label>
+                    <input type="password" id="login-password" required placeholder="Ingresa tu contraseña">
+                </div>
+                <button type="submit" class="submit-btn">Iniciar Sesión</button>
+            </form>
+            <p style="text-align: center; margin-top: 1rem; color: var(--text-secondary);">¿No tienes cuenta? <a href="#" onclick="openRegisterModal(); closeLoginModal();" style="color: var(--secondary-color); text-decoration: none; font-weight: 600;">Regístrate aquí</a></p>
+        </div>
+    </div>
+
+    <!-- Role Selection Modal -->
+    <div id="roleSelectionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Selecciona tu Rol</h2>
+                <button class="close-btn" onclick="closeRoleSelectionModal()">&times;</button>
+            </div>
+            <p id="role-selection-user" style="margin-bottom: 1rem; color: var(--text-secondary);"></p>
+            <div id="role-options" class="location-buttons" style="flex-wrap: wrap;"></div>
+            <p style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.9rem;">Selecciona el rol con el que deseas continuar.</p>
+        </div>
+    </div>
+
+    <!-- Registration Modal -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Crear tu Cuenta</h2>
+                <button class="close-btn" onclick="closeRegisterModal()">&times;</button>
+            </div>
+            <form onsubmit="handleRegister(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="reg-person-id">ID de Persona</label>
+                        <input type="text" id="reg-person-id" required placeholder="Número de identificación">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-document-type">Tipo de Documento</label>
+                        <select id="reg-document-type" required>
+                            <option value="">Selecciona tipo de documento</option>
+                            <option value="passport">Pasaporte</option>
+                            <option value="national_id">Cédula Nacional</option>
+                            <option value="driver_license">Licencia de Conducir</option>
+                            <option value="other">Otro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="reg-names">Nombres</label>
+                        <input type="text" id="reg-names" required placeholder="Nombre(s)">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-surnames">Apellidos</label>
+                        <input type="text" id="reg-surnames" required placeholder="Apellido(s)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="reg-birth-date">Fecha de Nacimiento</label>
+                    <input type="date" id="reg-birth-date" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="reg-sex">Sexo</label>
+                        <select id="reg-sex" required>
+                            <option value="">Selecciona género</option>
+                            <option value="male">Masculino</option>
+                            <option value="female">Femenino</option>
+                            <option value="other">Otro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-phone">Número de Teléfono</label>
+                        <input type="tel" id="reg-phone" required placeholder="(555) 123-4567">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="reg-address">Dirección</label>
+                    <input type="text" id="reg-address" required placeholder="Dirección de calle">
+                </div>
+
+                <div class="form-group">
+                    <label for="reg-email">Correo Electrónico</label>
+                    <input type="email" id="reg-email" required placeholder="tu@email.com">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="reg-blood-type">Tipo de Sangre</label>
+                        <select id="reg-blood-type" required>
+                            <option value="">Selecciona tipo de sangre</option>
+                            <option value="O-">O-</option>
+                            <option value="O+">O+</option>
+                            <option value="A-">A-</option>
+                            <option value="A+">A+</option>
+                            <option value="B-">B-</option>
+                            <option value="B+">B+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="AB+">AB+</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-emergency-contact">Contacto de Emergencia</label>
+                        <input type="text" id="reg-emergency-contact" required placeholder="Nombre y teléfono">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="reg-clinical-risk">Riesgo Clínico</label>
+                    <textarea id="reg-clinical-risk" placeholder="Alergias, condiciones crónicas, notas médicas..."></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">Registrarse</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Appointment Modal -->
+    <div id="appointmentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Agendar una Cita</h2>
+                <button class="close-btn" onclick="closeAppointmentModal()">&times;</button>
+            </div>
+            <form onsubmit="handleAppointment(event)">
+                <div class="form-group">
+                    <label for="appointment-name">Nombre Completo</label>
+                    <input type="text" id="appointment-name" required placeholder="Tu nombre">
+                </div>
+                <div class="form-group">
+                    <label for="appointment-email">Correo Electrónico</label>
+                    <input type="email" id="appointment-email" required placeholder="tu@email.com">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="appointment-date">Fecha Preferida</label>
+                        <input type="date" id="appointment-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="appointment-time">Hora Preferida</label>
+                        <input type="time" id="appointment-time" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="appointment-doctor">Seleccionar Doctor</label>
+                    <select id="appointment-doctor" required>
+                        <option value="">Elige un doctor</option>
+                        <option value="dr-smith">Dr. John Smith - Cardiología</option>
+                        <option value="dr-johnson">Dra. Sarah Johnson - Ortopedia</option>
+                        <option value="dr-brown">Dr. Michael Brown - Neurología</option>
+                        <option value="dr-davis">Dra. Emily Davis - Pediatría</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-btn">Agendar Cita</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 HealthCare+. Todos los derechos reservados.</p>
+        <p>Tu salud es nuestra prioridad. Confía en nosotros con tu cuidado.</p>
+    </footer>
+
+    <script>
+        let currentUser = null;
+        let userRole = null;
+        let pendingLogin = null;
+
+        // Modal Functions
+        function openLoginModal() {
+            document.getElementById('loginModal').classList.add('show');
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.remove('show');
+        }
+
+        function openRegisterModal() {
+            document.getElementById('registerModal').classList.add('show');
+        }
+
+        function closeRegisterModal() {
+            document.getElementById('registerModal').classList.remove('show');
+        }
+
+        function openAppointmentModal() {
+            document.getElementById('appointmentModal').classList.add('show');
+        }
+
+        function closeAppointmentModal() {
+            document.getElementById('appointmentModal').classList.remove('show');
+        }
+
+        function openRoleSelectionModal(roles, personaId) {
+            const modal = document.getElementById('roleSelectionModal');
+            const optionsContainer = document.getElementById('role-options');
+            const userLabel = document.getElementById('role-selection-user');
+            userLabel.textContent = `Selecciona un rol para ${personaId}`;
+            optionsContainer.innerHTML = roles.map(role => `<button type="button" class="location-btn" onclick="confirmRoleSelection('${role}')">${role}</button>`).join('');
+            modal.classList.add('show');
+        }
+
+        function closeRoleSelectionModal() {
+            const modal = document.getElementById('roleSelectionModal');
+            modal.classList.remove('show');
+            document.getElementById('role-options').innerHTML = '';
+        }
+
+        // Close modal when clicking outside the content
+        window.addEventListener('click', (event) => {
+            if (event.target === document.getElementById('loginModal')) {
+                closeLoginModal();
+            }
+            if (event.target === document.getElementById('registerModal')) {
+                closeRegisterModal();
+            }
+            if (event.target === document.getElementById('appointmentModal')) {
+                closeAppointmentModal();
+            }
+            if (event.target === document.getElementById('roleSelectionModal')) {
+                closeRoleSelectionModal();
+            }
+        });
+
+        // Form Handlers
+        async function handleLogin(event) {
+            event.preventDefault();
+            const personaIdInput = document.getElementById('login-persona-id');
+            const passwordInput = document.getElementById('login-password');
+            const personaId = personaIdInput.value.trim();
+            const password = passwordInput.value;
+
+            if (!personaId || !password) {
+                alert('Por favor ingresa persona_id y contraseña.');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ persona_id: personaId, password })
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                    const message = data && data.message ? data.message : 'Credenciales inválidas. Intenta nuevamente.';
+                    throw new Error(message);
+                }
+
+                const roles = Array.isArray(data.roles) ? data.roles : Array.isArray(data.user_roles) ? data.user_roles : [];
+
+                if (!roles || roles.length === 0) {
+                    alert('No se encontraron roles para este usuario.');
+                    return;
+                }
+
+                pendingLogin = { personaId, password };
+
+                if (roles.length === 1) {
+                    await confirmRoleSelection(roles[0]);
+                } else {
+                    closeLoginModal();
+                    openRoleSelectionModal(roles, personaId);
+                }
+            } catch (error) {
+                console.error('Error during login:', error);
+                alert(error.message || 'Hubo un problema iniciando sesión.');
+            }
+        }
+
+        async function confirmRoleSelection(role) {
+            if (!pendingLogin) {
+                alert('No hay una sesión pendiente. Intenta iniciar sesión de nuevo.');
+                return;
+            }
+
+            const normalizedRole = (role || '').toLowerCase();
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/auth/login/confirm-role', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        persona_id: pendingLogin.personaId,
+                        role,
+                        password: pendingLogin.password
+                    })
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                    const message = data && data.message ? data.message : 'No se pudo confirmar el rol.';
+                    throw new Error(message);
+                }
+
+                currentUser = pendingLogin.personaId;
+                userRole = normalizedRole;
+                pendingLogin = null;
+
+                closeRoleSelectionModal();
+                closeLoginModal();
+                document.getElementById('login-password').value = '';
+                document.getElementById('login-persona-id').value = '';
+
+                updateUserUI();
+                navigateAfterLogin(normalizedRole);
+            } catch (error) {
+                console.error('Error confirming role:', error);
+                alert(error.message || 'Hubo un problema confirmando el rol.');
+            }
+        }
+
+        function navigateAfterLogin(role) {
+            if (role === 'patient' || role === 'paciente') {
+                switchToPatientView();
+                return;
+            }
+            if (role === 'doctor') {
+                switchToDoctorView();
+                return;
+            }
+            if (role === 'technician' || role === 'tecnico') {
+                switchToTechnicianView();
+                return;
+            }
+            if (role === 'secretary' || role === 'secretaria') {
+                switchToSecretaryView();
+                return;
+            }
+            if (role === 'admin' || role === 'administrador') {
+                switchToDashboard();
+                return;
+            }
+            switchToHome();
+        }
+
+        function handleRegister(event) {
+            event.preventDefault();
+            const formData = {
+                personId: document.getElementById('reg-person-id').value,
+                documentType: document.getElementById('reg-document-type').value,
+                names: document.getElementById('reg-names').value,
+                surnames: document.getElementById('reg-surnames').value,
+                birthDate: document.getElementById('reg-birth-date').value,
+                sex: document.getElementById('reg-sex').value,
+                address: document.getElementById('reg-address').value,
+                phone: document.getElementById('reg-phone').value,
+                email: document.getElementById('reg-email').value,
+                bloodType: document.getElementById('reg-blood-type').value,
+                emergencyContact: document.getElementById('reg-emergency-contact').value,
+                clinicalRisk: document.getElementById('reg-clinical-risk').value
+            };
+            
+            console.log('Registration data:', formData);
+            alert(`¡Gracias por registrarte! Tu cuenta ha sido creada. Por favor inicia sesión para continuar.`);
+            closeRegisterModal();
+            
+            // Clear form
+            document.getElementById('registerModal').querySelector('form').reset();
+        }
+
+        function handleAppointment(event) {
+            event.preventDefault();
+            const appointmentData = {
+                name: document.getElementById('appointment-name').value,
+                email: document.getElementById('appointment-email').value,
+                date: document.getElementById('appointment-date').value,
+                time: document.getElementById('appointment-time').value,
+                doctor: document.getElementById('appointment-doctor').value
+            };
+            
+            alert(`Tu cita ha sido agendada para ${appointmentData.date} a las ${appointmentData.time}. Se enviará un correo de confirmación a ${appointmentData.email}.`);
+            closeAppointmentModal();
+            document.getElementById('appointmentModal').querySelector('form').reset();
+        }
+
+        function updateUserUI() {
+            const authButtons = document.getElementById('auth-buttons');
+            const userInfo = document.getElementById('user-info');
+            const userName = document.getElementById('user-name');
+            const homeLink = document.getElementById('home-link');
+            const dashboardLink = document.getElementById('dashboard-link');
+            const secretaryLink = document.getElementById('secretary-link');
+            const doctorLink = document.getElementById('doctor-link');
+            const technicianLink = document.getElementById('technician-link');
+            const patientLink = document.getElementById('patient-link');
+            const normalizedRole = (userRole || '').toLowerCase();
+            
+            authButtons.classList.add('hide');
+            userInfo.classList.add('show');
+            userName.textContent = currentUser;
+            
+            // Reset all role-specific links to hidden
+            homeLink.style.display = 'none';
+            dashboardLink.style.display = 'none';
+            secretaryLink.style.display = 'none';
+            doctorLink.style.display = 'none';
+            technicianLink.style.display = 'none';
+            patientLink.style.display = 'none';
+
+            // Show links based on role
+            if (normalizedRole === 'admin' || normalizedRole === 'administrador') {
+                homeLink.style.display = 'inline';
+                dashboardLink.style.display = 'inline';
+            } else if (normalizedRole === 'secretary' || normalizedRole === 'secretaria') {
+                homeLink.style.display = 'inline';
+                secretaryLink.style.display = 'inline';
+            } else if (normalizedRole === 'doctor') {
+                homeLink.style.display = 'inline';
+                doctorLink.style.display = 'inline';
+            } else if (normalizedRole === 'technician' || normalizedRole === 'tecnico') {
+                homeLink.style.display = 'inline';
+                technicianLink.style.display = 'inline';
+            } else if (normalizedRole === 'patient' || normalizedRole === 'paciente') {
+                homeLink.style.display = 'inline';
+                patientLink.style.display = 'inline';
+            } else { // Guest
+                homeLink.style.display = 'none'; // Guests typically don't see these nav links
+            }
+        }
+
+        function switchToHome() {
+            document.getElementById('home-view').classList.remove('hidden');
+            document.getElementById('dashboard-view').classList.remove('show');
+            document.getElementById('secretary-view').classList.remove('show');
+            document.getElementById('doctor-view').classList.remove('show');
+            document.getElementById('technician-view').classList.remove('show');
+            document.getElementById('patient-view').classList.remove('show');
+        }
+
+        function switchToSecretaryView() {
+            if (userRole !== 'secretary' && userRole !== 'secretaria' && userRole !== 'admin') { // Admins can also access secretary view
+                alert('No tienes permiso para acceder al sistema de agendamiento de citas.');
+                return;
+            }
+            document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('dashboard-view').classList.remove('show');
+            document.getElementById('secretary-view').classList.add('show');
+            document.getElementById('doctor-view').classList.remove('show');
+            document.getElementById('technician-view').classList.remove('show');
+            document.getElementById('patient-view').classList.remove('show');
+            initializeSecretaryView(); // Initialize the secretary view elements
+        }
+
+        function switchToDashboard() {
+            if (userRole !== 'admin') {
+                alert('No tienes permiso para acceder al dashboard.');
+                return;
+            }
+            document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('dashboard-view').classList.add('show');
+            document.getElementById('secretary-view').classList.remove('show');
+            document.getElementById('doctor-view').classList.remove('show');
+            document.getElementById('technician-view').classList.remove('show');
+            document.getElementById('patient-view').classList.remove('show');
+        }
+
+        function switchToDoctorView() {
+            if (userRole !== 'doctor') {
+                alert('No tienes permiso para acceder al Portal del Doctor.');
+                return;
+            }
+            document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('dashboard-view').classList.remove('show');
+            document.getElementById('secretary-view').classList.remove('show');
+            document.getElementById('doctor-view').classList.add('show');
+            document.getElementById('technician-view').classList.remove('show');
+            document.getElementById('patient-view').classList.remove('show');
+        }
+
+        function switchToTechnicianView() {
+            if (userRole !== 'technician' && userRole !== 'tecnico') {
+                alert('No tienes permiso para acceder al Panel del Técnico.');
+                return;
+            }
+            document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('dashboard-view').classList.remove('show');
+            document.getElementById('secretary-view').classList.remove('show');
+            document.getElementById('doctor-view').classList.remove('show');
+            document.getElementById('technician-view').classList.add('show');
+            document.getElementById('patient-view').classList.remove('show');
+        }
+
+        function switchToPatientView() {
+            if (userRole !== 'patient' && userRole !== 'paciente') {
+                alert('No tienes permiso para acceder al Panel del Paciente.');
+                return;
+            }
+            document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('dashboard-view').classList.remove('show');
+            document.getElementById('secretary-view').classList.remove('show');
+            document.getElementById('doctor-view').classList.remove('show');
+            document.getElementById('technician-view').classList.remove('show');
+            document.getElementById('patient-view').classList.add('show');
+        }
+
+
+        function handleLogout() {
+            currentUser = null;
+            userRole = null;
+            pendingLogin = null;
+            const authButtons = document.getElementById('auth-buttons');
+            const userInfo = document.getElementById('user-info');
+            authButtons.classList.remove('hide');
+            userInfo.classList.remove('show');
+            ['home-link', 'dashboard-link', 'secretary-link', 'doctor-link', 'technician-link', 'patient-link'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = 'none';
+            });
+            closeRoleSelectionModal();
+            closeLoginModal();
+            document.getElementById('role-options').innerHTML = '';
+            document.getElementById('login-password').value = '';
+            document.getElementById('login-persona-id').value = '';
+            switchToHome();
+            alert('Has cerrado sesión exitosamente.');
+        }
+
+        function updateActiveButton(event, location) {
+            const buttons = event.target.parentElement.querySelectorAll('.location-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function fetchMedications(event, location) {
+            const container = document.getElementById('medications-container');
+            updateActiveButton(event, location);
+            
+            container.innerHTML = '<div class="data-loading">Cargando datos de medicamentos para ' + location + '...</div>';
+            
+            // Map locations to their API endpoints
+            const endpoints = {
+                'global': 'http://127.0.0.1:5000/medicamentos/top_global',
+                'downtown': 'http://127.0.0.1:5000/medicamentos/top_pereira',
+                'westside': 'http://127.0.0.1:5000/medicamentos/top_bogota',
+                'eastside': 'http://127.0.0.1:5000/medicamentos/top_cali'
+            };
+            
+            const endpoint = endpoints[location];
+            
+            if (endpoint) {
+                // Fetch real data from API
+                fetch(endpoint)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Take only first 6 results
+                        const top6 = data.slice(0, 6);
+                        
+                        let cardsHTML = '<div class="data-grid">';
+                        top6.forEach(item => {
+                            const hospitalId = item[0];
+                            const hospitalName = item[1];
+                            const medicamentoNombre = item[2];
+                            const recetas = item[3];
+                            
+                            cardsHTML += `
+                                <div class="data-card">
+                                    <h4>${medicamentoNombre}</h4>
+                                    <p><strong>Hospital:</strong> ${hospitalName}</p>
+                                    <p><strong>Recetas:</strong> ${recetas}</p>
+                                    <p><strong>ID Hospital:</strong> ${hospitalId}</p>
+                                </div>
+                            `;
+                        });
+                        cardsHTML += '</div>';
+                        cardsHTML += `<p style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.9rem;">Datos obtenidos desde ${endpoint.split('/').pop()}</p>`;
+                        
+                        container.innerHTML = cardsHTML;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching medications:', error);
+                        container.innerHTML = '<div style="color: var(--danger-color);">Error al cargar los datos. Por favor, verifica que el servidor esté en ejecución.</div>';
+                    });
+            } else {
+                // Fallback for unknown locations
+                container.innerHTML = '<div style="color: var(--warning-color);">Ubicación no disponible.</div>';
+            }
+        }
+
+        function fetchConsultations(event, location) {
+            const container = document.getElementById('consultations-container');
+            updateActiveButton(event, location);
+            
+            container.innerHTML = '<div class="data-loading">Cargando datos de consultas para ' + location + '...</div>';
+
+            const endpoints = {
+                'global': 'http://127.0.0.1:5000/doctores/top_global',
+                'downtown': 'http://127.0.0.1:5000/doctores/top_pereira',
+                'westside': 'http://127.0.0.1:5000/doctores/top_bogota',
+                'eastside': 'http://127.0.0.1:5000/doctores/top_cali'
+            };
+
+            const ciudadesPorLocation = {
+                'global': new Set(['pereira', 'bogotá', 'bogota', 'cali']),
+                'downtown': new Set(['pereira']),
+                'westside': new Set(['bogotá', 'bogota']),
+                'eastside': new Set(['cali'])
+            };
+
+            const endpoint = endpoints[location];
+            if (!endpoint) {
+                container.innerHTML = '<div style="color: var(--warning-color);">Ubicación no disponible.</div>';
+                return;
+            }
+
+            fetch(endpoint)
+                .then(response => response.json())
+                .then(data => {
+                    const semanasPermitidas = new Set(['2025-W50', '2025-W49', '2025-W48']);
+                    const ciudadesPermitidas = ciudadesPorLocation[location] || new Set();
+                    const rankingsPermitidos = location === 'global'
+                        ? new Set([1])
+                        : new Set([1, 2, 3]);
+
+                    const filtrados = data.filter(item => {
+                        const semana = item[0];
+                        const ciudad = item[3];
+                        const ranking = Number(item[5]);
+                        return rankingsPermitidos.has(ranking) && semanasPermitidas.has(semana) && (ciudadesPermitidas.size === 0 || ciudadesPermitidas.has(ciudad.toLowerCase()));
+                    });
+
+                    if (!filtrados.length) {
+                        container.innerHTML = '<div style="color: var(--text-secondary);">No hay datos para mostrar.</div>';
+                        return;
+                    }
+
+                    // Agrupar por semana y ordenar semanas desc para mostrar juntas las mismas semanas
+                    const porSemana = new Map();
+                    filtrados.forEach(item => {
+                        const semana = item[0];
+                        if (!porSemana.has(semana)) {
+                            porSemana.set(semana, []);
+                        }
+                        porSemana.get(semana).push(item);
+                    });
+
+                    const semanasOrdenadas = Array.from(porSemana.keys()).sort((a, b) => b.localeCompare(a));
+
+                    let cardsHTML = '';
+                    semanasOrdenadas.forEach(semana => {
+                        const itemsSemana = porSemana.get(semana);
+                        cardsHTML += `<div style="margin-bottom: 1.5rem;">
+                            <h3 style="margin-bottom: 0.75rem; color: var(--text-primary);">Semana ${semana}</h3>
+                            <div class="data-grid">
+                        `;
+
+                        itemsSemana.forEach(item => {
+                            const doctor = item[1];
+                            const hospital = item[2];
+                            const ciudad = item[3];
+                            const consultas = item[4];
+                            const ranking = item[5];
+
+                            cardsHTML += `
+                                <div class="data-card">
+                                    <h4>${doctor}</h4>
+                                    <p><strong>Consultas (semana ${semana}):</strong> ${consultas}</p>
+                                    <p><strong>Hospital:</strong> ${hospital}</p>
+                                    <p><strong>Ciudad:</strong> ${ciudad}</p>
+                                    <p><strong>Ranking:</strong> ${ranking}</p>
+                                </div>
+                            `;
+                        });
+
+                        cardsHTML += '</div></div>';
+                    });
+
+                    container.innerHTML = cardsHTML;
+                })
+                .catch(error => {
+                    console.error('Error fetching consultations:', error);
+                    container.innerHTML = '<div style="color: var(--danger-color);">Error al cargar los datos. Por favor, verifica que el servidor esté en ejecución.</div>';
+                });
+        }
+
+        function fetchAppointmentTime(event, location) {
+            const container = document.getElementById('appointment-time-container');
+            updateActiveButton(event, location);
+            
+            container.innerHTML = '<div class="data-loading">Cargando datos de tiempo para ' + location + '...</div>';
+            
+            const endpoints = {
+                'global': 'http://127.0.0.1:5000/promedio/global',
+                'downtown': 'http://127.0.0.1:5000/promedio/pereira',
+                'westside': 'http://127.0.0.1:5000/promedio/bogota',
+                'eastside': 'http://127.0.0.1:5000/promedio/cali'
+            };
+
+            const endpoint = endpoints[location];
+            if (!endpoint) {
+                container.innerHTML = '<div style="color: var(--warning-color);">Ubicación no disponible.</div>';
+                return;
+            }
+
+            fetch(endpoint)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data || data.length === 0) {
+                        container.innerHTML = '<div style="color: var(--text-secondary);">No hay datos para mostrar.</div>';
+                        return;
+                    }
+
+                    let cardsHTML = '<div class="data-grid">';
+                    data.forEach(item => {
+                        const sedeId = item[0];
+                        const hospitalNombre = item[1];
+                        const tiempoPromedio = item[2];
+
+                        cardsHTML += `
+                            <div class="data-card" style="border-left-color: var(--warning-color);">
+                                <h4>${hospitalNombre}</h4>
+                                <p><strong>Tiempo promedio (días):</strong> ${tiempoPromedio}</p>
+                                <p><strong>ID Sede:</strong> ${sedeId}</p>
+                            </div>
+                        `;
+                    });
+                    cardsHTML += '</div>';
+
+                    container.innerHTML = cardsHTML;
+                })
+                .catch(error => {
+                    console.error('Error fetching appointment time:', error);
+                    container.innerHTML = '<div style="color: var(--danger-color);">Error al cargar los datos. Por favor, verifica que el servidor esté en ejecución.</div>';
+                });
+        }
+
+        function fetchPatientsPerIllness(event, location) {
+            const container = document.getElementById('illness-patients-container');
+            updateActiveButton(event, location);
+            
+            container.innerHTML = '<div class="data-loading">Cargando datos de enfermedades para ' + location + '...</div>';
+            
+            setTimeout(() => {
+                container.innerHTML = `
+                    <div class="data-grid">
+                        <div class="data-card" style="border-left-color: var(--success-color);">
+                            <h4>Hipertensión</h4>
+                            <p><strong>Pacientes atendidos:</strong> 1,245</p>
+                            <p><strong>Tendencia:</strong> Estable</p>
+                        </div>
+                        <div class="data-card" style="border-left-color: var(--success-color);">
+                            <h4>Diabetes (Tipo 2)</h4>
+                            <p><strong>Pacientes atendidos:</strong> 987</p>
+                            <p><strong>Tendencia:</strong> En aumento</p>
+                        </div>
+                        <div class="data-card" style="border-left-color: var(--success-color);">
+                            <h4>Resfriado común</h4>
+                            <p><strong>Pacientes atendidos:</strong> 2,156</p>
+                            <p><strong>Tendencia:</strong> Pico estacional</p>
+                        </div>
+                        <div class="data-card" style="border-left-color: var(--success-color);">
+                            <h4>Asma</h4>
+                            <p><strong>Pacientes atendidos:</strong> 567</p>
+                            <p><strong>Tendencia:</strong> Estable</p>
+                        </div>
+                    </div>
+                    <p style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.9rem;">Datos obtenidos desde /api/patients/illness?location=${location}</p>
+                `;
+            }, 800);
+        }
+
+        // Added functions for new sections
+        function fetchEquipment(event, location) {
+            console.log("[v0] Fetching equipment data for location:", location);
+            updateActiveButton(event, location);
+            const container = document.getElementById('equipment-container');
+            container.innerHTML = '<div class="data-loading">Cargando datos de equipamiento para ' + location + '...</div>';
+            
+            // API call placeholder
+            setTimeout(() => {
+                container.innerHTML = `
+                    <div class="data-grid">
+                        <div class="data-card">
+                            <h4>Departamento de Radiología</h4>
+                            <p><strong>Equipos:</strong> Tomógrafo, Rayos X, Ultrasonido</p>
+                            <p><strong>Compartido con:</strong> Cardiología, Ortopedia</p>
+                        </div>
+                        <div class="data-card">
+                            <h4>Laboratorio</h4>
+                            <p><strong>Equipos:</strong> Analizador de sangre, microscopios, centrífugas</p>
+                            <p><strong>Compartido con:</strong> Todos los departamentos</p>
+                        </div>
+                        <div class="data-card">
+                            <h4>Departamento de Cardiología</h4>
+                            <p><strong>Equipos:</strong> ECG, ecocardiograma, prueba de esfuerzo</p>
+                            <p><strong>Compartido con:</strong> Emergencias, Radiología</p>
+                        </div>
+                        <div class="data-card">
+                            <h4>Quirófano</h4>
+                            <p><strong>Equipos:</strong> Luces quirúrgicas, monitores, máquina de anestesia</p>
+                            <p><strong>Compartido con:</strong> Ortopedia, Neurocirugía</p>
+                        </div>
+                    </div>
+                `;
+            }, 500);
+        }
+
+        function generateAuditReport(event) {
+            console.log("[v0] Generating audit report");
+            const auditContainer = document.getElementById('audit-container');
+            const auditLoading = document.getElementById('audit-loading');
+            
+            auditLoading.style.display = 'block';
+            auditContainer.innerHTML = '';
+            
+            fetch('http://127.0.0.1:5000/informe/generar')
+                .then(response => response.json())
+                .then(data => {
+                    auditLoading.style.display = 'none';
+                    
+                    if (!data || data.length === 0) {
+                        auditContainer.innerHTML = '<div style="color: var(--text-secondary);">No hay registros de auditoría para mostrar.</div>';
+                        return;
+                    }
+                    
+                    let tableHTML = `
+                        <div style="background: var(--card-background); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color); overflow-x: auto;">
+                            <h3 style="margin-bottom: 1rem; color: var(--text-primary);">Informe de Auditoría del Sistema</h3>
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="border-bottom: 2px solid var(--border-color);">
+                                        <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Fecha</th>
+                                        <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Operación</th>
+                                        <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">IP</th>
+                                        <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Usuario</th>
+                                        <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Rol</th>
+                                        <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Ciudad</th>
+                                        <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Ubicación</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                    `;
+                    
+                    data.forEach(item => {
+                        const fecha = item[0];
+                        const operacion = item[1];
+                        const ip = item[2];
+                        const usuario = item[3];
+                        const rol = item[4];
+                        const ciudad = item[5];
+                        const ubicacion = item[6];
+                        
+                        tableHTML += `
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 0.75rem;">${fecha}</td>
+                                <td style="padding: 0.75rem;">${operacion}</td>
+                                <td style="padding: 0.75rem;">${ip}</td>
+                                <td style="padding: 0.75rem;">${usuario}</td>
+                                <td style="padding: 0.75rem;"><span style="background-color: var(--primary-color); color: white; padding: 0.25rem 0.5rem; border-radius: 4px;">${rol}</span></td>
+                                <td style="padding: 0.75rem;">${ciudad}</td>
+                                <td style="padding: 0.75rem;">${ubicacion}</td>
+                            </tr>
+                        `;
+                    });
+                    
+                    tableHTML += `
+                                </tbody>
+                            </table>
+                            <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+                                <button class="submit-btn" style="padding: 0.5rem 1.5rem;">📥 Descargar PDF</button>
+                                <button class="submit-btn" style="padding: 0.5rem 1.5rem; background-color: var(--secondary-color);">🖨️ Imprimir</button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    auditContainer.innerHTML = tableHTML;
+                })
+                .catch(error => {
+                    console.error('Error fetching audit report:', error);
+                    auditLoading.style.display = 'none';
+                    auditContainer.innerHTML = '<div style="color: var(--danger-color);">Error al cargar el informe de auditoría. Por favor, verifica que el servidor esté en ejecución.</div>';
+                });
+        }
+
+        // --- Secretary Appointment System Functions ---
+
+        // Placeholder for API calls
+        const mockApi = {
+            getDepartments: async (location) => {
+                await new Promise(resolve => setTimeout(resolve, 300)); // Simulate network delay
+                if (location === 'downtown') return ['Cardiology', 'Neurology', 'Orthopedics'];
+                if (location === 'westside') return ['Pediatrics', 'Dermatology', 'Cardiology'];
+                if (location === 'eastside') return ['Oncology', 'Neurology', 'Orthopedics'];
+                return [];
+            },
+            getDoctors: async (department, location) => {
+                await new Promise(resolve => setTimeout(resolve, 300));
+                if (department === 'Cardiology') return [{ id: 'doc-smith', name: 'Dr. John Smith', department: 'Cardiology', location: 'downtown' }, { id: 'doc-smith-west', name: 'Dr. John Smith', department: 'Cardiology', location: 'westside' }];
+                if (department === 'Neurology') return [{ id: 'doc-brown', name: 'Dr. Michael Brown', department: 'Neurology', location: 'downtown' }, { id: 'doc-brown-east', name: 'Dr. Michael Brown', department: 'Neurology', location: 'eastside' }];
+                if (department === 'Orthopedics') return [{ id: 'doc-johnson', name: 'Dr. Sarah Johnson', department: 'Orthopedics', location: 'downtown' }, { id: 'doc-johnson-east', name: 'Dr. Sarah Johnson', department: 'Orthopedics', location: 'eastside' }];
+                if (department === 'Pediatrics') return [{ id: 'doc-davis', name: 'Dr. Emily Davis', department: 'Pediatrics', location: 'westside' }];
+                if (department === 'Dermatology') return [{ id: 'doc-anderson', name: 'Dr. Lisa Anderson', department: 'Dermatology', location: 'westside' }];
+                if (department === 'Oncology') return [{ id: 'doc-wilson', name: 'Dr. Robert Wilson', department: 'Oncology', location: 'eastside' }];
+                return [];
+            },
+            getAvailableDates: async (doctorId) => {
+                await new Promise(resolve => setTimeout(resolve, 300));
+                // Simulate returning dates for the next 7 days
+                const dates = [];
+                const today = new Date();
+                for (let i = 0; i < 7; i++) {
+                    const date = new Date(today);
+                    date.setDate(today.getDate() + i);
+                    dates.push(date.toISOString().split('T')[0]);
+                }
+                return dates;
+            },
+            getAvailableTimes: async (doctorId, date) => {
+                await new Promise(resolve => setTimeout(resolve, 300));
+                // Simulate available time slots
+                const times = ['09:00', '10:00', '11:00', '14:00', '15:00', '16:00'];
+                return times;
+            },
+            getPatientInfo: async (patientId) => {
+                await new Promise(resolve => setTimeout(resolve, 300));
+                // Mock patient data
+                const patients = {
+                    'PAT-001': { name: 'Alice Wonderland', email: 'alice@example.com' },
+                    'PAT-002': { name: 'Bob The Builder', email: 'bob@example.com' },
+                    'PAT-003': { name: 'Charlie Chaplin', email: 'charlie@example.com' },
+                };
+                return patients[patientId] || null;
+            },
+            scheduleAppointment: async (appointmentData) => {
+                await new Promise(resolve => setTimeout(resolve, 500));
+                console.log("Scheduling appointment:", appointmentData);
+                return { success: true, appointmentId: 'APP-12345' };
+            },
+            getTodaysAppointments: async () => {
+                await new Promise(resolve => setTimeout(resolve, 500));
+                return [
+                    { id: 'APP-9001', time: '10:00', patientName: 'Alice Wonderland', service: 'Chequeo', doctor: 'Dr. John Smith' },
+                    { id: 'APP-9002', time: '11:30', patientName: 'Bob The Builder', service: 'Consulta General', doctor: 'Dr. Michael Brown' },
+                    { id: 'APP-9003', time: '14:00', patientName: 'Charlie Chaplin', service: 'Seguimiento', doctor: 'Dr. Sarah Johnson' },
+                ];
+            }
+        };
+
+        // UI Element References
+        const appointmentForm = document.getElementById('appointment-form');
+        const appointmentLocationSelect = document.getElementById('appointment-location');
+        const appointmentDepartmentSelect = document.getElementById('appointment-department');
+        const appointmentDoctorSelect = document.getElementById('appointment-doctor');
+        const appointmentDateInput = document.getElementById('appointment-date');
+        const appointmentTimeSelect = document.getElementById('appointment-time');
+        const appointmentServiceSelect = document.getElementById('appointment-service');
+        const appointmentPatientIdInput = document.getElementById('appointment-patient-id');
+        const appointmentPatientNameInput = document.getElementById('appointment-patient-name');
+        const appointmentPatientEmailInput = document.getElementById('appointment-patient-email');
+        const appointmentNotesTextarea = document.getElementById('appointment-notes');
+        const departmentLoading = document.getElementById('department-loading');
+        const doctorLoading = document.getElementById('doctor-loading');
+        const dateLoading = document.getElementById('date-loading');
+        const timeLoading = document.getElementById('time-loading');
+        const appointmentsList = document.getElementById('appointments-list');
+
+        async function populateDepartments() {
+            const location = appointmentLocationSelect.value;
+            appointmentDepartmentSelect.innerHTML = '<option value="">-- Selecciona un departamento --</option>'; // Reset
+            appointmentDoctorSelect.innerHTML = '<option value="">-- Selecciona un doctor --</option>'; // Reset
+            appointmentTimeSelect.innerHTML = '<option value="">-- Selecciona una hora --</option>'; // Reset
+            appointmentDateInput.value = ''; // Clear date
+
+            if (!location) return;
+
+            departmentLoading.style.display = 'block';
+            try {
+                const departments = await mockApi.getDepartments(location);
+                departments.forEach(dept => {
+                    const option = document.createElement('option');
+                    option.value = dept.toLowerCase();
+                    option.textContent = dept;
+                    appointmentDepartmentSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error("Error fetching departments:", error);
+                alert("Error al cargar departamentos. Por favor inténtalo de nuevo.");
+            } finally {
+                departmentLoading.style.display = 'none';
+            }
+        }
+
+        async function populateDoctors() {
+            const department = appointmentDepartmentSelect.value;
+            const location = appointmentLocationSelect.value;
+            appointmentDoctorSelect.innerHTML = '<option value="">-- Selecciona un doctor --</option>'; // Reset
+            appointmentTimeSelect.innerHTML = '<option value="">-- Selecciona una hora --</option>'; // Reset
+            appointmentDateInput.value = ''; // Clear date
+
+            if (!department || !location) return;
+
+            doctorLoading.style.display = 'block';
+            try {
+                const doctors = await mockApi.getDoctors(department, location);
+                doctors.forEach(doc => {
+                    const option = document.createElement('option');
+                    option.value = doc.id;
+                    option.textContent = doc.name;
+                    appointmentDoctorSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error("Error fetching doctors:", error);
+                alert("Error al cargar doctores. Por favor inténtalo de nuevo.");
+            } finally {
+                doctorLoading.style.display = 'none';
+            }
+        }
+
+        async function populateDates() {
+            const doctorId = appointmentDoctorSelect.value;
+            appointmentTimeSelect.innerHTML = '<option value="">-- Selecciona una hora --</option>'; // Reset
+            appointmentDateInput.value = ''; // Clear date input as well
+
+            if (!doctorId) return;
+
+            dateLoading.style.display = 'block';
+            try {
+                const dates = await mockApi.getAvailableDates(doctorId);
+                // Simulate setting min date for date input
+                if (dates.length > 0) {
+                    appointmentDateInput.min = dates[0]; 
+                }
+            } catch (error) {
+                console.error("Error fetching available dates:", error);
+                alert("Error al cargar fechas disponibles. Por favor inténtalo de nuevo.");
+            } finally {
+                dateLoading.style.display = 'none';
+            }
+        }
+
+        async function populateTimes() {
+            const doctorId = appointmentDoctorSelect.value;
+            const date = appointmentDateInput.value;
+            appointmentTimeSelect.innerHTML = '<option value="">-- Selecciona una hora --</option>'; // Reset
+
+            if (!doctorId || !date) return;
+
+            timeLoading.style.display = 'block';
+            try {
+                const times = await mockApi.getAvailableTimes(doctorId, date);
+                times.forEach(time => {
+                    const option = document.createElement('option');
+                    option.value = time;
+                    option.textContent = time;
+                    appointmentTimeSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error("Error fetching available times:", error);
+                alert("Error al cargar horarios disponibles. Por favor inténtalo de nuevo.");
+            } finally {
+                timeLoading.style.display = 'none';
+            }
+        }
+
+        async function fetchPatientInfo() {
+            const patientId = appointmentPatientIdInput.value;
+            if (!patientId) {
+                appointmentPatientNameInput.value = '';
+                appointmentPatientEmailInput.value = '';
+                return;
+            }
+
+            try {
+                const patient = await mockApi.getPatientInfo(patientId);
+                if (patient) {
+                    appointmentPatientNameInput.value = patient.name;
+                    appointmentPatientEmailInput.value = patient.email;
+                } else {
+                    appointmentPatientNameInput.value = '';
+                    appointmentPatientEmailInput.value = '';
+                    alert('ID de paciente no encontrado.');
+                }
+            } catch (error) {
+                console.error("Error fetching patient info:", error);
+                alert("Error al obtener información del paciente. Por favor inténtalo de nuevo.");
+                appointmentPatientNameInput.value = '';
+                appointmentPatientEmailInput.value = '';
+            }
+        }
+
+        async function handleSecretaryAppointment(event) {
+            event.preventDefault();
+
+            const appointmentData = {
+                location: appointmentLocationSelect.value,
+                department: appointmentDepartmentSelect.value,
+                doctorId: appointmentDoctorSelect.value,
+                date: appointmentDateInput.value,
+                time: appointmentTimeSelect.value,
+                serviceType: appointmentServiceSelect.value,
+                patientId: appointmentPatientIdInput.value,
+                patientName: appointmentPatientNameInput.value,
+                patientEmail: appointmentPatientEmailInput.value,
+                notes: appointmentNotesTextarea.value
+            };
+
+            try {
+                const result = await mockApi.scheduleAppointment(appointmentData);
+                if (result.success) {
+                    alert(`¡Cita agendada exitosamente! ID: ${result.appointmentId}`);
+                    appointmentForm.reset(); // Clear the form
+                    // Reset select options that depend on previous selections
+                    appointmentDepartmentSelect.innerHTML = '<option value="">-- Selecciona un departamento --</option>';
+                    appointmentDoctorSelect.innerHTML = '<option value="">-- Selecciona un doctor --</option>';
+                    appointmentTimeSelect.innerHTML = '<option value="">-- Selecciona una hora --</option>';
+                    appointmentPatientNameInput.value = '';
+                    appointmentPatientEmailInput.value = '';
+                    // Re-fetch today's appointments to show the new one
+                    fetchTodaysAppointments();
+                } else {
+                    alert("Error al agendar cita. Por favor inténtalo de nuevo.");
+                }
+            } catch (error) {
+                console.error("Error scheduling appointment:", error);
+                alert("Ocurrió un error al agendar la cita. Por favor inténtalo más tarde.");
+            }
+        }
+
+        async function fetchTodaysAppointments() {
+            const appointmentsListContainer = document.getElementById('appointments-list');
+            appointmentsListContainer.innerHTML = '<div class="data-loading">Cargando citas...</div>';
+            try {
+                const appointments = await mockApi.getTodaysAppointments();
+                if (appointments.length === 0) {
+                    appointmentsListContainer.innerHTML = '<p>No hay citas agendadas para hoy.</p>';
+                    return;
+                }
+                
+                const tableHtml = `
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--border-color);">
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Hora</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Nombre del Paciente</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Servicio</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Doctor</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${appointments.map(app => `
+                                <tr style="border-bottom: 1px solid var(--border-color);">
+                                    <td style="padding: 0.75rem;">${app.time}</td>
+                                    <td style="padding: 0.75rem;">${app.patientName}</td>
+                                    <td style="padding: 0.75rem;">${app.service}</td>
+                                    <td style="padding: 0.75rem;">${app.doctor}</td>
+                                    <td style="padding: 0.75rem;">
+                                        <button class="btn btn-outline" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;">Editar</button>
+                                        <button class="btn btn-danger" style="padding: 0.3rem 0.6rem; font-size: 0.8rem; background-color: var(--danger-color); color: white;">Cancelar</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+                appointmentsListContainer.innerHTML = tableHtml;
+            } catch (error) {
+                console.error("Error fetching today's appointments:", error);
+                appointmentsListContainer.innerHTML = '<p>Error al cargar citas. Por favor inténtalo de nuevo.</p>';
+            }
+        }
+
+        // Event Listeners for Secretary View
+        function onLocationChange() {
+            populateDepartments();
+        }
+        function onDepartmentChange() {
+            populateDoctors();
+        }
+        function onDoctorChange() { // Implicitly called by populateDoctors
+             populateDates();
+             populateTimes(); // Also clear times when doctor changes
+        }
+        function onDateChange() {
+             populateTimes();
+        }
+
+        // Add event listeners to the selects
+        appointmentLocationSelect.addEventListener('change', onLocationChange);
+        appointmentDepartmentSelect.addEventListener('change', onDepartmentChange);
+        appointmentDoctorSelect.addEventListener('change', onDoctorChange);
+        appointmentDateInput.addEventListener('change', onDateChange);
+        appointmentPatientIdInput.addEventListener('input', fetchPatientInfo); // Use input for real-time search
+
+        // Initial setup for secretary view selectors if it's shown initially
+        function initializeSecretaryView() {
+            const location = appointmentLocationSelect.value;
+            if (location) populateDepartments();
+        }
+
+        // --- Doctor View Functions ---
+        // Placeholder for mock API for doctor-specific functions
+        const mockDoctorApi = {
+            getDoctorAppointments: async () => {
+                await new Promise(resolve => setTimeout(resolve, 400)); // Simulate network delay
+                return [
+                    { id: 'APP-D101', time: '09:30', patientName: 'Paciente Alpha', service: 'Chequeo', status: 'Confirmado' },
+                    { id: 'APP-D102', time: '11:00', patientName: 'Paciente Beta', service: 'Seguimiento', status: 'Confirmado' },
+                    { id: 'APP-D103', time: '15:00', patientName: 'Paciente Gamma', service: 'Consulta de Procedimiento', status: 'Pendiente' },
+                ];
+            },
+            writePrescription: async (data) => {
+                await new Promise(resolve => setTimeout(resolve, 500));
+                console.log("Prescription created:", data);
+                return { success: true, prescriptionId: 'PRES-XYZ123' };
+            },
+            getPatientPrescriptions: async (patientId) => {
+                await new Promise(resolve => setTimeout(resolve, 400));
+                if (patientId === 'PAT-001') {
+                    return [
+                        { medication: 'Amoxicilina', dosage: '500mg', frequency: 'Dos veces al día', duration: 7, notes: 'Tomar con comida' },
+                        { medication: 'Lisinopril', dosage: '10mg', frequency: 'Una vez al día', duration: 30, notes: 'Monitorear presión arterial' },
+                    ];
+                } else if (patientId === 'PAT-002') {
+                    return [
+                        { medication: 'Ibuprofeno', dosage: '200mg', frequency: 'Según necesidad', duration: 3, notes: 'Solo para el dolor' },
+                    ];
+                }
+                return [];
+            },
+            writeMedicalRecord: async (data) => {
+                await new Promise(resolve => setTimeout(resolve, 500));
+                console.log("Medical record created:", data);
+                return { success: true, recordId: 'REC-ABC456' };
+            },
+            getPatientMedicalRecords: async (patientId) => {
+                await new Promise(resolve => setTimeout(resolve, 400));
+                if (patientId === 'PAT-001') {
+                    return [
+                        { date: '2025-12-08', appointmentId: 'APP-9001', diagnosis: 'Diabetes Tipo 2', vitalSigns: 'PA: 130/85, FC: 72', notes: 'Paciente cumple con medicación.' },
+                        { date: '2025-11-15', appointmentId: 'APP-8005', diagnosis: 'Hipertensión', vitalSigns: 'PA: 135/90, FC: 75', notes: 'Se recomiendan cambios en estilo de vida.' },
+                    ];
+                } else if (patientId === 'PAT-003') {
+                    return [
+                        { date: '2025-12-01', appointmentId: 'APP-9003', diagnosis: 'Seguimiento para Gastritis', vitalSigns: 'PA: 120/80, FC: 70', notes: 'Síntomas mejorando.' },
+                    ];
+                }
+                return [];
+            }
+        };
+
+        // Doctor Appointment Functions
+        function fetchDoctorAppointments() {
+            const container = document.getElementById('doctor-appointments-list');
+            container.innerHTML = '<div class="data-loading">Cargando tus citas...</div>';
+            mockDoctorApi.getDoctorAppointments().then(appointments => {
+                if (appointments.length === 0) {
+                    container.innerHTML = '<p>No tienes citas agendadas para hoy.</p>';
+                    return;
+                }
+                const tableHtml = `
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--border-color);">
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Hora</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Nombre del Paciente</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Servicio</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Estado</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${appointments.map(app => `
+                                <tr style="border-bottom: 1px solid var(--border-color);">
+                                    <td style="padding: 0.75rem;">${app.time}</td>
+                                    <td style="padding: 0.75rem;">${app.patientName}</td>
+                                    <td style="padding: 0.75rem;">${app.service}</td>
+                                    <td style="padding: 0.75rem;">${app.status}</td>
+                                    <td style="padding: 0.75rem;">
+                                        <button class="btn btn-outline" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;" onclick="openPatientRecordModal('${app.patientName}')">Ver Expediente</button>
+                                        <button class="btn btn-primary" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;" onclick="openPrescriptionModal('${app.patientName}')">Prescribir</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+                container.innerHTML = tableHtml;
+            }).catch(error => {
+                console.error("Error fetching doctor appointments:", error);
+                container.innerHTML = '<p>Error al cargar citas. Por favor inténtalo de nuevo.</p>';
+            });
+        }
+
+        // Prescription Functions
+        function handleWritePrescription(event) {
+            event.preventDefault();
+            const prescriptionData = {
+                patientId: document.getElementById('prescription-patient-id').value,
+                medication: document.getElementById('prescription-medication').value,
+                dosage: document.getElementById('prescription-dosage').value,
+                frequency: document.getElementById('prescription-frequency').value,
+                duration: document.getElementById('prescription-duration').value,
+                notes: document.getElementById('prescription-notes').value
+            };
+            mockDoctorApi.writePrescription(prescriptionData).then(response => {
+                if (response.success) {
+                    alert(`¡Prescripción creada exitosamente! ID: ${response.prescriptionId}`);
+                    document.getElementById('prescription-form').reset();
+                } else {
+                    alert('Error al crear prescripción. Por favor inténtalo de nuevo.');
+                }
+            }).catch(error => {
+                console.error("Error creating prescription:", error);
+                alert('Ocurrió un error. Por favor inténtalo más tarde.');
+            });
+        }
+
+        function fetchPatientPrescriptions() {
+            const patientId = document.getElementById('view-prescription-patient-id').value;
+            const listContainer = document.getElementById('patient-prescriptions-list');
+            listContainer.innerHTML = '<div class="data-loading">Cargando prescripciones...</div>';
+            mockDoctorApi.getPatientPrescriptions(patientId).then(prescriptions => {
+                if (prescriptions.length === 0) {
+                    listContainer.innerHTML = `<p>No se encontraron prescripciones para el ID de paciente: ${patientId}.</p>`;
+                    return;
+                }
+                const tableHtml = `
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--border-color);">
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Medicamento</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Dosis</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Frecuencia</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Duración</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Notas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${prescriptions.map(p => `
+                                <tr style="border-bottom: 1px solid var(--border-color);">
+                                    <td style="padding: 0.75rem;">${p.medication}</td>
+                                    <td style="padding: 0.75rem;">${p.dosage}</td>
+                                    <td style="padding: 0.75rem;">${p.frequency}</td>
+                                    <td style="padding: 0.75rem;">${p.duration} días</td>
+                                    <td style="padding: 0.75rem;">${p.notes}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+                listContainer.innerHTML = tableHtml;
+            }).catch(error => {
+                console.error("Error fetching patient prescriptions:", error);
+                listContainer.innerHTML = '<p>Error al cargar prescripciones. Por favor inténtalo de nuevo.</p>';
+            });
+        }
+
+        // Medical Record Functions
+        function handleWriteMedicalRecord(event) {
+            event.preventDefault();
+            const recordData = {
+                patientId: document.getElementById('record-patient-id').value,
+                appointmentId: document.getElementById('record-appointment-id').value,
+                diagnosis: document.getElementById('record-diagnosis').value,
+                vitalSigns: document.getElementById('record-vital-signs').value,
+                notes: document.getElementById('record-notes').value
+            };
+            mockDoctorApi.writeMedicalRecord(recordData).then(response => {
+                if (response.success) {
+                    alert(`¡Expediente médico creado exitosamente! ID: ${response.recordId}`);
+                    document.getElementById('medical-record-form').reset();
+                } else {
+                    alert('Error al crear expediente médico. Por favor inténtalo de nuevo.');
+                }
+            }).catch(error => {
+                console.error("Error creating medical record:", error);
+                alert('Ocurrió un error. Por favor inténtalo más tarde.');
+            });
+        }
+
+        function fetchPatientMedicalRecords() {
+            const patientId = document.getElementById('view-record-patient-id').value;
+            const listContainer = document.getElementById('patient-medical-records-list');
+            listContainer.innerHTML = '<div class="data-loading">Cargando expedientes...</div>';
+            mockDoctorApi.getPatientMedicalRecords(patientId).then(records => {
+                if (records.length === 0) {
+                    listContainer.innerHTML = `<p>No se encontraron expedientes médicos para el ID de paciente: ${patientId}.</p>`;
+                    return;
+                }
+                const tableHtml = `
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--border-color);">
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Fecha</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">ID de Cita</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Diagnóstico</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Signos Vitales</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Notas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${records.map(r => `
+                                <tr style="border-bottom: 1px solid var(--border-color);">
+                                    <td style="padding: 0.75rem;">${r.date}</td>
+                                    <td style="padding: 0.75rem;">${r.appointmentId}</td>
+                                    <td style="padding: 0.75rem;">${r.diagnosis}</td>
+                                    <td style="padding: 0.75rem;">${r.vitalSigns}</td>
+                                    <td style="padding: 0.75rem;">${r.notes}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+                listContainer.innerHTML = tableHtml;
+            }).catch(error => {
+                console.error("Error fetching patient medical records:", error);
+                listContainer.innerHTML = '<p>Error al cargar expedientes. Por favor inténtalo de nuevo.</p>';
+            });
+        }
+
+        // --- Technician View Functions ---
+        // Placeholder for mock API for technician-specific functions
+        const mockTechnicianApi = {
+            getEquipmentList: async (location) => {
+                await new Promise(resolve => setTimeout(resolve, 400));
+                if (location === 'global') {
+                    return [
+                        { id: 'EQP-001', name: 'Escáner CT', location: 'Hospital Centro', status: 'Operacional' },
+                        { id: 'EQP-002', name: 'Máquina de Resonancia', location: 'Clínica Oeste', status: 'Operacional' },
+                        { id: 'EQP-003', name: 'Máquina de Rayos X', location: 'Centro Médico Este', status: 'Necesita Mantenimiento' },
+                        { id: 'EQP-004', name: 'Equipo de Ultrasonido', location: 'Hospital Centro', status: 'Operacional' },
+                    ];
+                } else if (location === 'downtown') {
+                    return [
+                        { id: 'EQP-001', name: 'Escáner CT', location: 'Hospital Centro', status: 'Operacional' },
+                        { id: 'EQP-004', name: 'Equipo de Ultrasonido', location: 'Hospital Centro', status: 'Operacional' },
+                    ];
+                } else if (location === 'westside') {
+                    return [
+                        { id: 'EQP-002', name: 'Máquina de Resonancia', location: 'Clínica Oeste', status: 'Operacional' },
+                    ];
+                } else if (location === 'eastside') {
+                    return [
+                        { id: 'EQP-003', name: 'Máquina de Rayos X', location: 'Centro Médico Este', status: 'Necesita Mantenimiento' },
+                    ];
+                }
+                return [];
+            },
+            recordMaintenance: async (data) => {
+                await new Promise(resolve => setTimeout(resolve, 500));
+                console.log("Maintenance recorded:", data);
+                return { success: true, maintenanceId: 'MAINT-JKL789' };
+            },
+            getMaintenanceHistory: async () => {
+                await new Promise(resolve => setTimeout(resolve, 400));
+                return [
+                    { equipmentId: 'EQP-003', equipmentName: 'Máquina de Rayos X', location: 'Centro Médico Este', type: 'Mantenimiento Correctivo', date: '2025-12-01', description: 'Reemplazada fuente de alimentación defectuosa.', status: 'Completado' },
+                    { equipmentId: 'EQP-001', equipmentName: 'Escáner CT', location: 'Hospital Centro', type: 'Mantenimiento Preventivo', date: '2025-11-15', description: 'Revisión rutinaria del sistema y limpieza.', status: 'Completado' },
+                    { equipmentId: 'EQP-002', equipmentName: 'Máquina de Resonancia', location: 'Clínica Oeste', type: 'Calibración', date: '2025-10-30', description: 'Calibrada intensidad del campo magnético.', status: 'Completado' },
+                ];
+            }
+        };
+
+        // Technician Functions
+        function fetchEquipmentList() {
+            const locationFilter = document.getElementById('equipment-location-filter').value;
+            const listContainer = document.getElementById('equipment-list');
+            listContainer.innerHTML = '<div class="data-loading">Cargando equipos...</div>';
+            mockTechnicianApi.getEquipmentList(locationFilter).then(equipment => {
+                if (equipment.length === 0) {
+                    listContainer.innerHTML = '<p>No se encontró equipo para esta ubicación.</p>';
+                    return;
+                }
+                const tableHtml = `
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--border-color);">
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">ID de Equipo</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Nombre</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Ubicación</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Estado</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${equipment.map(eq => `
+                                <tr style="border-bottom: 1px solid var(--border-color);">
+                                    <td style="padding: 0.75rem;">${eq.id}</td>
+                                    <td style="padding: 0.75rem;">${eq.name}</td>
+                                    <td style="padding: 0.75rem;">${eq.location}</td>
+                                    <td style="padding: 0.75rem;">${eq.status}</td>
+                                    <td style="padding: 0.75rem;">
+                                        <button class="btn btn-outline" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;" onclick="openMaintenanceForm('${eq.id}', '${eq.name}')">Registrar Mantenimiento</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+                listContainer.innerHTML = tableHtml;
+            }).catch(error => {
+                console.error("Error fetching equipment list:", error);
+                listContainer.innerHTML = '<p>Error al cargar equipos. Por favor inténtalo de nuevo.</p>';
+            });
+        }
+
+        function filterEquipmentByLocation() {
+            fetchEquipmentList();
+        }
+
+        function openMaintenanceForm(equipmentId, equipmentName) {
+            document.getElementById('maintenance-equipment-id').value = equipmentId;
+            document.getElementById('maintenance-equipment-name').value = equipmentName;
+            // Optionally, pre-fill location if it's available from the equipment data
+            const selectedLocation = document.getElementById('equipment-location-filter').value;
+            if (selectedLocation !== 'global') {
+                document.getElementById('maintenance-location').value = selectedLocation;
+            }
+            // Scroll to the maintenance form if it's not visible
+            document.getElementById('maintenance-form').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function handleRecordMaintenance(event) {
+            event.preventDefault();
+            const maintenanceData = {
+                equipmentId: document.getElementById('maintenance-equipment-id').value,
+                equipmentName: document.getElementById('maintenance-equipment-name').value,
+                location: document.getElementById('maintenance-location').value,
+                type: document.getElementById('maintenance-type').value,
+                date: document.getElementById('maintenance-date').value,
+                description: document.getElementById('maintenance-description').value,
+                status: document.getElementById('maintenance-status').value
+            };
+            mockTechnicianApi.recordMaintenance(maintenanceData).then(response => {
+                if (response.success) {
+                    alert(`¡Mantenimiento registrado exitosamente! ID: ${response.maintenanceId}`);
+                    document.getElementById('maintenance-form').reset();
+                    // Clear pre-filled ID and name after successful submission
+                    document.getElementById('maintenance-equipment-id').value = '';
+                    document.getElementById('maintenance-equipment-name').value = '';
+                    fetchMaintenanceHistory(); // Refresh history
+                } else {
+                    alert('Error al registrar mantenimiento. Por favor inténtalo de nuevo.');
+                }
+            }).catch(error => {
+                console.error("Error recording maintenance:", error);
+                alert('Ocurrió un error. Por favor inténtalo más tarde.');
+            });
+        }
+
+        function fetchMaintenanceHistory() {
+            const historyContainer = document.getElementById('maintenance-history-list');
+            historyContainer.innerHTML = '<div class="data-loading">Cargando historial de mantenimiento...</div>';
+            mockTechnicianApi.getMaintenanceHistory().then(history => {
+                if (history.length === 0) {
+                    historyContainer.innerHTML = '<p>No hay historial de mantenimiento disponible.</p>';
+                    return;
+                }
+                const tableHtml = `
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--border-color);">
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Fecha</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Equipo</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Tipo</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Estado</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${history.map(h => `
+                                <tr style="border-bottom: 1px solid var(--border-color);">
+                                    <td style="padding: 0.75rem;">${h.date}</td>
+                                    <td style="padding: 0.75rem;">${h.equipmentName} (${h.equipmentId})</td>
+                                    <td style="padding: 0.75rem;">${h.type}</td>
+                                    <td style="padding: 0.75rem;">${h.status}</td>
+                                    <td style="padding: 0.75rem;">${h.description}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+                historyContainer.innerHTML = tableHtml;
+            }).catch(error => {
+                console.error("Error fetching maintenance history:", error);
+                historyContainer.innerHTML = '<p>Error al cargar historial de mantenimiento. Por favor inténtalo de nuevo.</p>';
+            });
+        }
+
+        // --- Patient View Functions ---
+        // Placeholder for mock API for patient-specific functions
+        const mockPatientApi = {
+            getPatientAppointments: async (patientId) => { // Assuming patientId is available from currentUser
+                await new Promise(resolve => setTimeout(resolve, 400));
+                return [
+                    { id: 'APP-P501', date: '2025-12-15', time: '10:00', doctor: 'Dr. John Smith', service: 'Chequeo Cardiológico', location: 'Hospital Centro', status: 'Confirmado' },
+                    { id: 'APP-P502', date: '2025-12-20', time: '14:30', doctor: 'Dr. Emily Davis', service: 'Consulta Pediátrica', location: 'Clínica Oeste', status: 'Confirmado' },
+                    { id: 'APP-P503', date: '2026-01-05', time: '09:00', doctor: 'Dr. Sarah Johnson', service: 'Seguimiento Ortopédico', location: 'Hospital Centro', status: 'Pendiente' },
+                ];
+            },
+            getPatientPrescriptions: async (patientId) => { // Assuming patientId is available from currentUser
+                await new Promise(resolve => setTimeout(resolve, 400));
+                // Mock data, could be same as doctor's view for a specific patient
+                return [
+                    { medication: 'Amoxicilina', dosage: '500mg', frequency: 'Dos veces al día', duration: 7, notes: 'Tomar con comida', prescribedBy: 'Dr. John Smith', prescriptionDate: '2025-12-08' },
+                    { medication: 'Ibuprofeno', dosage: '200mg', frequency: 'Según necesidad', duration: 3, notes: 'Solo para el dolor', prescribedBy: 'Dr. Emily Davis', prescriptionDate: '2025-12-20' },
+                ];
+            }
+        };
+
+        function fetchPatientAppointmentsView() {
+            const container = document.getElementById('patient-appointments-list');
+            container.innerHTML = '<div class="data-loading">Cargando tus citas...</div>';
+            // Assuming currentUser holds the logged-in patient's identifier
+            mockPatientApi.getPatientAppointments(currentUser).then(appointments => {
+                if (appointments.length === 0) {
+                    container.innerHTML = '<p>No se encontraron citas.</p>';
+                    return;
+                }
+                const tableHtml = `
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--border-color);">
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Fecha</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Hora</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Doctor</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Servicio</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Ubicación</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${appointments.map(app => `
+                                <tr style="border-bottom: 1px solid var(--border-color);">
+                                    <td style="padding: 0.75rem;">${app.date}</td>
+                                    <td style="padding: 0.75rem;">${app.time}</td>
+                                    <td style="padding: 0.75rem;">${app.doctor}</td>
+                                    <td style="padding: 0.75rem;">${app.service}</td>
+                                    <td style="padding: 0.75rem;">${app.location}</td>
+                                    <td style="padding: 0.75rem;">${app.status}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+                container.innerHTML = tableHtml;
+            }).catch(error => {
+                console.error("Error fetching patient appointments:", error);
+                container.innerHTML = '<p>Error al cargar citas. Por favor inténtalo de nuevo.</p>';
+            });
+        }
+
+        function fetchPatientPrescriptionsView() {
+            const container = document.getElementById('patient-prescriptions-view-list');
+            container.innerHTML = '<div class="data-loading">Cargando tus prescripciones...</div>';
+            // Assuming currentUser holds the logged-in patient's identifier
+            mockPatientApi.getPatientPrescriptions(currentUser).then(prescriptions => {
+                if (prescriptions.length === 0) {
+                    container.innerHTML = '<p>No se encontraron prescripciones.</p>';
+                    return;
+                }
+                const tableHtml = `
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--border-color);">
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Medicamento</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Dosis</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Frecuencia</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Duración</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Prescrito por</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Fecha de Prescripción</th>
+                                <th style="padding: 0.75rem; text-align: left; color: var(--text-primary);">Notas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${prescriptions.map(p => `
+                                <tr style="border-bottom: 1px solid var(--border-color);">
+                                    <td style="padding: 0.75rem;">${p.medication}</td>
+                                    <td style="padding: 0.75rem;">${p.dosage}</td>
+                                    <td style="padding: 0.75rem;">${p.frequency}</td>
+                                    <td style="padding: 0.75rem;">${p.duration} días</td>
+                                    <td style="padding: 0.75rem;">${p.prescribedBy}</td>
+                                    <td style="padding: 0.75rem;">${p.prescriptionDate}</td>
+                                    <td style="padding: 0.75rem;">${p.notes}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+                container.innerHTML = tableHtml;
+            }).catch(error => {
+                console.error("Error fetching patient prescriptions:", error);
+                container.innerHTML = '<p>Error al cargar prescripciones. Por favor inténtalo de nuevo.</p>';
+            });
+        }
+
+        // Initial setup
+        function initializeApp() {
+            // Check initial user state if any
+            // For now, always show home and hide others
+            switchToHome(); 
+        }
+
+        initializeApp();
+    </script>
+</body>
+</html>
