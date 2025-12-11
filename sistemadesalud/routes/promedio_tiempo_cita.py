@@ -77,7 +77,6 @@ def promedio_tiempo_cita_cali():
 @promedio_bp.get("/global")
 def promedio_tiempo_cita_global():
     try:
-        set_credentials ('postgres','root12345')
         conn = get_connection()
     except Exception as e:
         return jsonify({"error": str(e)}), 401   # No hay login o credenciales inválidas

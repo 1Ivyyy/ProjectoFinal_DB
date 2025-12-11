@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify
 from db import get_connection
 from session_manager import set_credentials
+from session_manager import get_credentials
 
 medicamentos_bp = Blueprint("medicamentos", __name__)
 
@@ -8,7 +9,6 @@ medicamentos_bp = Blueprint("medicamentos", __name__)
 @medicamentos_bp.get("/top_pereira")
 def top_medicamentos_pereira():
     try:
-        set_credentials ('postgres','root12345')
         conn = get_connection()
     except Exception as e:
         return jsonify({"error": str(e)}), 401   # No hay login o credenciales inválidas

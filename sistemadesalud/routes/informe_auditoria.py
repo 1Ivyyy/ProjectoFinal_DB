@@ -7,7 +7,6 @@ informe_bp = Blueprint("informe", __name__)
 @informe_bp.get("/generar")
 def generar_informe():
     try:
-        set_credentials ('postgres','root12345')
         conn = get_connection()
     except Exception as e:
         return jsonify({"error": str(e)}), 401   # No hay login o credenciales inválidas

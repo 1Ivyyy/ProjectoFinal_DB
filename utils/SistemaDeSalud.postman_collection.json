@@ -1,0 +1,187 @@
+{
+	"info": {
+		"_postman_id": "04d4411f-c687-4a5b-8c51-80b240d506b1",
+		"name": "SistemaDeSalud",
+		"description": "Para el Request Top Medicamentos Recetados los posibles endpoints son:\n\n/top_global\n\n/top_bogota\n\n/top_medellin\n\n/top_cali",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "44261653",
+		"_collection_link": "https://andres-354079.postman.co/workspace/Andres's-Workspace~94eb9b61-5ec3-41dc-8dc4-7dc81d9c34cd/collection/44261653-04d4411f-c687-4a5b-8c51-80b240d506b1?action=share&source=collection_link&creator=44261653"
+	},
+	"item": [
+		{
+			"name": "Medicamentos",
+			"item": [
+				{
+					"name": "Listar Medicamentos",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"num_ident\": 8006,\r\n  \"tipo_documento\": \"CC\",\r\n  \"nombres\": \"Alejandro José\",\r\n  \"apellidos\": \"Méndez Ríos\",\r\n  \"fecha_nacimiento\": \"1977-03-25\",\r\n  \"sexo\": \"M\",\r\n  \"direccion\": \"Calle 45 #12-30\",\r\n  \"telefono\": \"3109876543\",\r\n  \"email\": \"alejandro9.mendez@esperanza.com\",\r\n  \"tipo_sangre\": \"AB+\",\r\n  \"contacto_emergencia\": \"3021234567\",\r\n  \"riesgo_clinico\": \"Bajo\",\r\n  \"password\": \"alejandro123\"\r\n}"
+						},
+						"url": "http://127.0.0.1:5000/medicamentos/listar"
+					},
+					"response": []
+				},
+				{
+					"name": "Top Medicamentos Recetados",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"num_ident\": 8006,\r\n  \"tipo_documento\": \"CC\",\r\n  \"nombres\": \"Alejandro José\",\r\n  \"apellidos\": \"Méndez Ríos\",\r\n  \"fecha_nacimiento\": \"1977-03-25\",\r\n  \"sexo\": \"M\",\r\n  \"direccion\": \"Calle 45 #12-30\",\r\n  \"telefono\": \"3109876543\",\r\n  \"email\": \"alejandro9.mendez@esperanza.com\",\r\n  \"tipo_sangre\": \"AB+\",\r\n  \"contacto_emergencia\": \"3021234567\",\r\n  \"riesgo_clinico\": \"Bajo\",\r\n  \"password\": \"alejandro123\"\r\n}"
+						},
+						"url": "http://127.0.0.1:5000/medicamentos/top_global"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Medicos",
+			"item": [
+				{
+					"name": "Medicos Con Mayor Numero de Consultas",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Promedio Tiempo",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"user\": \"42\",\r\n  \"password\": \"alejandro123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/auth/login"
+			},
+			"response": []
+		},
+		{
+			"name": "Registrar Paciente",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"num_ident\": 9932,\r\n  \"tipo_documento\": \"CC\",\r\n  \"nombres\": \"Alejandro José\",\r\n  \"apellidos\": \"Méndez Ríos\",\r\n  \"fecha_nacimiento\": \"1977-03-25\",\r\n  \"sexo\": \"M\",\r\n  \"direccion\": \"Calle 45 #12-30\",\r\n  \"telefono\": \"3109876543\",\r\n  \"email\": \"alejandro23.mendez@esperanza.com\",\r\n  \"tipo_sangre\": \"AB+\",\r\n  \"contacto_emergencia\": \"3021234567\",\r\n  \"riesgo_clinico\": \"Bajo\",\r\n  \"password\": \"alejandro123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/register/paciente"
+			},
+			"response": []
+		},
+		{
+			"name": "Registrar Doctor",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"num_ident\": 80098,\r\n  \"tipo_documento\": \"CC\",\r\n  \"nombres\": \"Alejandro José\",\r\n  \"apellidos\": \"Méndez Ríos\",\r\n  \"fecha_nacimiento\": \"1977-03-25\",\r\n  \"sexo\": \"M\",\r\n  \"direccion\": \"Calle 45 #12-30\",\r\n  \"telefono\": \"3109876543\",\r\n  \"email\": \"alejandro78.mendez@esperanza.com\",\r\n  \"departamento_id\": \"1\",\r\n  \"sede_id\": \"1\",\r\n  \"fecha_contratacion\": \"2008-03-25\",\r\n  \"salario\": \"15800000.00\",\r\n  \"especialidad\" : \"Cardiología\",\r\n  \"password\": \"alejandro123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/register/doctor"
+			},
+			"response": []
+		},
+		{
+			"name": "Registrar Tecnico",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"num_ident\": 80034,\r\n  \"tipo_documento\": \"CC\",\r\n  \"nombres\": \"Alejandro José\",\r\n  \"apellidos\": \"Méndez Ríos\",\r\n  \"fecha_nacimiento\": \"1977-03-25\",\r\n  \"sexo\": \"M\",\r\n  \"direccion\": \"Calle 45 #12-30\",\r\n  \"telefono\": \"3109876543\",\r\n  \"email\": \"alejandro67.mendez@esperanza.com\",\r\n  \"departamento_id\": \"1\",\r\n  \"sede_id\": \"1\",\r\n  \"fecha_contratacion\": \"2008-03-25\",\r\n  \"salario\": \"15800000.00\",\r\n  \"area\" : \"Mantenimiento de Equipos de Monitoreo\",\r\n  \"password\": \"alejandro123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:5000/register/tecnico"
+			},
+			"response": []
+		},
+		{
+			"name": "Paciente Lista Preescripciones",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Medico Lista Preescripciones de Paciente",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Informe Auditoria Generar",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "pacientes",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "equipamiento Compratido",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}

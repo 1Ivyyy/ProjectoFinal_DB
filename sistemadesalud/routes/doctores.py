@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify
 from db import get_connection
 from session_manager import set_credentials
+from session_manager import get_credentials
 
 doctores_bp = Blueprint("doctores", __name__)
 
@@ -77,7 +78,6 @@ def top_doctores_cali():
 @doctores_bp.get("/top_global")
 def top_doctores_global():
     try:
-        set_credentials ('postgres','root12345')
         conn = get_connection()
     except Exception as e:
         return jsonify({"error": str(e)}), 401   # No hay login o credenciales inválidas
